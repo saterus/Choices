@@ -13,7 +13,6 @@ export default class Dropdown {
   /**
    * Show dropdown to user by adding active state class
    * @return {Object} Class instance
-   * @public
    */
   show(focusInput = false) {
     const body = document.body;
@@ -26,8 +25,7 @@ export default class Dropdown {
         html.offsetHeight
       );
 
-    this.instance.containerOuter.classList.add(this.classNames.openState);
-    this.instance.containerOuter.setAttribute('aria-expanded', 'true');
+    this.instance.container.expand();
     this.element.classList.add(this.classNames.activeState);
     this.active = true;
 
@@ -43,10 +41,10 @@ export default class Dropdown {
     }
 
     if (shouldFlip) {
-      this.instance.containerOuter.classList.add(this.classNames.flippedState);
+      this.instance.container.flip();
       this.flipped = true;
     } else {
-      this.instance.containerOuter.classList.remove(this.classNames.flippedState);
+      this.instance.container.unflip();
       this.flipped = false;
     }
 
@@ -57,25 +55,23 @@ export default class Dropdown {
 
     triggerEvent(this.instance.passedElement, 'showDropdown', {});
 
-    return this;
+    return this.instance;
   }
 
   /**
    * Hide dropdown from user
    * @return {Object} Class instance
-   * @public
    */
   hide(blurInput = false) {
     // A dropdown flips if it does not have space within the page
     const isFlipped = this.flipped;
 
-    this.instance.containerOuter.classList.remove(this.classNames.openState);
-    this.instance.containerOuter.setAttribute('aria-expanded', 'false');
+    this.instance.container.contract();
     this.element.classList.remove(this.classNames.activeState);
     this.active = false;
 
     if (isFlipped) {
-      this.instance.containerOuter.classList.remove(this.classNames.flippedState);
+      this.instance.container.unflip();
       this.flipped = false;
     }
 
@@ -86,13 +82,12 @@ export default class Dropdown {
 
     triggerEvent(this.instance.passedElement, 'hideDropdown', {});
 
-    return this;
+    return this.instance;
   }
 
   /**
    * Determine whether to hide or show dropdown based on its current state
    * @return {Object} Class instance
-   * @public
    */
   toggle() {
     if (this.active) {
@@ -100,9 +95,14 @@ export default class Dropdown {
     } else {
       this.show(true);
     }
-    return this;
+
+    return this.instance;
   }
 
+  /**
+   * Get highlighted item
+   * @return {NodeList}
+   */
   getHighlighted() {
     return this.element.querySelector(`.${this.classNames.highlightedState}`);
   }
