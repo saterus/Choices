@@ -70,15 +70,35 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _fuse2 = _interopRequireDefault(_fuse);
 
-	var _index = __webpack_require__(3);
+	var _dropdown = __webpack_require__(3);
+
+	var _dropdown2 = _interopRequireDefault(_dropdown);
+
+	var _container = __webpack_require__(5);
+
+	var _container2 = _interopRequireDefault(_container);
+
+	var _choiceList = __webpack_require__(6);
+
+	var _choiceList2 = _interopRequireDefault(_choiceList);
+
+	var _itemList = __webpack_require__(7);
+
+	var _itemList2 = _interopRequireDefault(_itemList);
+
+	var _input = __webpack_require__(8);
+
+	var _input2 = _interopRequireDefault(_input);
+
+	var _index = __webpack_require__(9);
 
 	var _index2 = _interopRequireDefault(_index);
 
-	var _index3 = __webpack_require__(29);
+	var _index3 = __webpack_require__(35);
 
-	var _utils = __webpack_require__(30);
+	var _utils = __webpack_require__(4);
 
-	__webpack_require__(31);
+	__webpack_require__(36);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -239,8 +259,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.wasTap = true;
 
 	    // Cutting the mustard
-	    var cuttingTheMustard = 'classList' in document.documentElement;
-	    if (!cuttingTheMustard) console.error('Choices: Your browser doesn\'t support Choices');
+	    if (!'classList' in document.documentElement) {
+	      console.error('Choices: Your browser doesn\'t support Choices');
+	    }
 
 	    // Input type check
 	    var isValidType = ['select-one', 'select-multiple', 'text'].some(function (type) {
@@ -250,7 +271,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (canInit) {
 	      // If element has already been initalised with Choices
-	      if (this.passedElement.getAttribute('data-choice') === 'active') return;
+	      if (this.passedElement.getAttribute('data-choice') === 'active') {
+	        return;
+	      }
 
 	      // Let's go
 	      this.init();
@@ -266,14 +289,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Initialise Choices
 	   * @return
-	   * @public
 	   */
 
 
 	  _createClass(Choices, [{
 	    key: 'init',
 	    value: function init() {
-	      if (this.initialised === true) return;
+	      if (this.initialised === true) {
+	        return;
+	      }
 
 	      var callback = this.config.callbackOnInit;
 
@@ -301,19 +325,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Destroy Choices and nullify values
 	     * @return
-	     * @public
 	     */
 
 	  }, {
 	    key: 'destroy',
 	    value: function destroy() {
-	      if (this.initialised === false) return;
+	      if (this.initialised === false) {
+	        return;
+	      }
 
 	      // Remove all event listeners
 	      this._removeEventListeners();
 
 	      // Reinstate passed element
 	      this.passedElement.classList.remove(this.config.classNames.input, this.config.classNames.hiddenState);
+
 	      this.passedElement.removeAttribute('tabindex');
 	      this.passedElement.removeAttribute('style', 'display:none;');
 	      this.passedElement.removeAttribute('aria-hidden');
@@ -323,9 +349,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.passedElement.value = this.passedElement.value;
 
 	      // Move passed element back to original position
-	      this.containerOuter.parentNode.insertBefore(this.passedElement, this.containerOuter);
+	      this.container.outer.parentNode.insertBefore(this.passedElement, this.container.outer);
+
 	      // Remove added elements
-	      this.containerOuter.parentNode.removeChild(this.containerOuter);
+	      this.container.outer.parentNode.removeChild(this.container.outer);
 
 	      // Clear data store
 	      this.clearStore();
@@ -343,7 +370,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Array} choices   Choices to add to groups
 	     * @param  {DocumentFragment} fragment Fragment to add groups and options to (optional)
 	     * @return {DocumentFragment} Populated options fragment
-	     * @private
 	     */
 
 	  }, {
@@ -383,7 +409,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Array} choices    Choices to add to list
 	     * @param  {DocumentFragment} fragment Fragment to add choices to (optional)
 	     * @return {DocumentFragment} Populated choices fragment
-	     * @private
 	     */
 
 	  }, {
@@ -416,7 +441,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Array} items    Items to add to list
 	     * @param  {DocumentFragment} fragment Fragrment to add items to (optional)
 	     * @return
-	     * @private
 	     */
 
 	  }, {
@@ -462,7 +486,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Render DOM with values
 	     * @return
-	     * @private
 	     */
 
 	  }, {
@@ -482,11 +505,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var choiceListFragment = document.createDocumentFragment();
 
 	            // Clear choices
-	            this.choiceList.innerHTML = '';
+	            this.choiceList.clear();
 
 	            // Scroll back to top of choices list
 	            if (this.config.resetScrollPosition) {
-	              this.choiceList.scrollTop = 0;
+	              this.choiceList.resetScrollPosition();
 	            }
 
 	            // If we have grouped options
@@ -499,8 +522,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (choiceListFragment.childNodes && choiceListFragment.childNodes.length > 0) {
 	              // If we actually have anything to add to our dropdown
 	              // append it and highlight the first choice
-	              this.choiceList.appendChild(choiceListFragment);
-	              this._highlightChoice();
+	              this.choiceList.element.appendChild(choiceListFragment);
+	              this.choiceList.highlightChoice();
 	            } else {
 	              // Otherwise show a notice
 	              var dropdownItem = void 0;
@@ -514,7 +537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                dropdownItem = this._getTemplate('notice', notice);
 	              }
 
-	              this.choiceList.appendChild(dropdownItem);
+	              this.choiceList.element.appendChild(dropdownItem);
 	            }
 	          }
 	        }
@@ -528,12 +551,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var itemListFragment = this.renderItems(activeItems);
 
 	            // Clear list
-	            this.itemList.innerHTML = '';
+	            this.itemList.clear();
 
 	            // If we have items to add
 	            if (itemListFragment.childNodes) {
 	              // Update list
-	              this.itemList.appendChild(itemListFragment);
+	              this.itemList.element.appendChild(itemListFragment);
 	            }
 	          }
 	        }
@@ -546,7 +569,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Select item (a selected item can be deleted)
 	     * @param  {Element} item Element to select
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -585,7 +607,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Deselect item
 	     * @param  {Element} item Element to de-select
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -619,7 +640,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Highlight items within store
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -638,7 +658,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Deselect items within store
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -658,7 +677,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Remove an item from the store by its value
 	     * @param  {String} value Value to search for
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -687,7 +705,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @note Removed items are soft deleted
 	     * @param  {Number} excludedId Optionally exclude item by ID
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -710,7 +727,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Remove all selected items from store
 	     * @note Removed items are soft deleted
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -737,107 +753,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * Show dropdown to user by adding active state class
-	     * @return {Object} Class instance
-	     * @public
-	     */
-
-	  }, {
-	    key: 'showDropdown',
-	    value: function showDropdown() {
-	      var focusInput = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-	      var body = document.body;
-	      var html = document.documentElement;
-	      var winHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-
-	      this.containerOuter.classList.add(this.config.classNames.openState);
-	      this.containerOuter.setAttribute('aria-expanded', 'true');
-	      this.dropdown.classList.add(this.config.classNames.activeState);
-
-	      var dimensions = this.dropdown.getBoundingClientRect();
-	      var dropdownPos = Math.ceil(dimensions.top + window.scrollY + dimensions.height);
-
-	      // If flip is enabled and the dropdown bottom position is greater than the window height flip the dropdown.
-	      var shouldFlip = false;
-	      if (this.config.position === 'auto') {
-	        shouldFlip = dropdownPos >= winHeight;
-	      } else if (this.config.position === 'top') {
-	        shouldFlip = true;
-	      }
-
-	      if (shouldFlip) {
-	        this.containerOuter.classList.add(this.config.classNames.flippedState);
-	      } else {
-	        this.containerOuter.classList.remove(this.config.classNames.flippedState);
-	      }
-
-	      // Optionally focus the input if we have a search input
-	      if (focusInput && this.canSearch && document.activeElement !== this.input) {
-	        this.input.focus();
-	      }
-
-	      (0, _utils.triggerEvent)(this.passedElement, "showDropdown", {});
-
-	      return this;
-	    }
-
-	    /**
-	     * Hide dropdown from user
-	     * @return {Object} Class instance
-	     * @public
-	     */
-
-	  }, {
-	    key: 'hideDropdown',
-	    value: function hideDropdown() {
-	      var blurInput = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-	      // A dropdown flips if it does not have space within the page
-	      var isFlipped = this.containerOuter.classList.contains(this.config.classNames.flippedState);
-
-	      this.containerOuter.classList.remove(this.config.classNames.openState);
-	      this.containerOuter.setAttribute('aria-expanded', 'false');
-	      this.dropdown.classList.remove(this.config.classNames.activeState);
-
-	      if (isFlipped) {
-	        this.containerOuter.classList.remove(this.config.classNames.flippedState);
-	      }
-
-	      // Optionally blur the input if we have a search input
-	      if (blurInput && this.canSearch && document.activeElement === this.input) {
-	        this.input.blur();
-	      }
-
-	      (0, _utils.triggerEvent)(this.passedElement, "hideDropdown", {});
-
-	      return this;
-	    }
-
-	    /**
-	     * Determine whether to hide or show dropdown based on its current state
-	     * @return {Object} Class instance
-	     * @public
-	     */
-
-	  }, {
-	    key: 'toggleDropdown',
-	    value: function toggleDropdown() {
-	      var hasActiveDropdown = this.dropdown.classList.contains(this.config.classNames.activeState);
-	      if (hasActiveDropdown) {
-	        this.hideDropdown();
-	      } else {
-	        this.showDropdown(true);
-	      }
-
-	      return this;
-	    }
-
-	    /**
 	     * Get value(s) of input (i.e. inputted items (text) or selected choices (select))
 	     * @param {Boolean} valueOnly Get only values of selected items, otherwise return selected items
 	     * @return {Array/String} selected value (select-one) or array of selected items (inputs & select-multiple)
-	     * @public
 	     */
 
 	  }, {
@@ -870,7 +788,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * an item will created directly.
 	     * @param  {Array}   args  Array of value objects or value strings
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -917,7 +834,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Select value of select box via the value of an existing choice
 	     * @param {Array/String} value An array of strings of a single string
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -958,7 +874,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {String} label - Name of 'label' property
 	     * @param  {Boolean} replaceChoices Whether existing choices should be removed
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -977,7 +892,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	          // Add choices if passed
 	          if (choices && choices.length) {
-	            this.containerOuter.classList.remove(this.config.classNames.loadingState);
+	            this.container.stopLoader();
 	            choices.forEach(function (result, index) {
 	              var isSelected = result.selected ? result.selected : false;
 	              var isDisabled = result.disabled ? result.disabled : false;
@@ -997,33 +912,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Clear items,choices and groups
 	     * @note Hard delete
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
 	    key: 'clearStore',
 	    value: function clearStore() {
 	      this.store.dispatch((0, _index3.clearAll)());
-	      return this;
-	    }
-
-	    /**
-	     * Set value of input to blank
-	     * @return {Object} Class instance
-	     * @public
-	     */
-
-	  }, {
-	    key: 'clearInput',
-	    value: function clearInput() {
-	      if (this.input.value) this.input.value = '';
-	      if (this.passedElement.type !== 'select-one') {
-	        this._setInputWidth();
-	      }
-	      if (this.passedElement.type !== 'text' && this.config.search) {
-	        this.isSearching = false;
-	        this.store.dispatch((0, _index3.activateChoices)(true));
-	      }
 	      return this;
 	    }
 
@@ -1036,13 +930,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'enable',
 	    value: function enable() {
 	      this.passedElement.disabled = false;
-	      var isDisabled = this.containerOuter.classList.contains(this.config.classNames.disabledState);
+	      var isDisabled = this.container.disabled;
 	      if (this.initialised && isDisabled) {
 	        this._addEventListeners();
 	        this.passedElement.removeAttribute('disabled');
-	        this.input.removeAttribute('disabled');
-	        this.containerOuter.classList.remove(this.config.classNames.disabledState);
-	        this.containerOuter.removeAttribute('aria-disabled');
+	        this.input.enable();
+	        this.container.enable();
 	      }
 	      return this;
 	    }
@@ -1050,21 +943,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Disable interaction with Choices
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
 	    key: 'disable',
 	    value: function disable() {
 	      this.passedElement.disabled = true;
-	      var isEnabled = !this.containerOuter.classList.contains(this.config.classNames.disabledState);
+	      var isEnabled = !this.container.disabled;
+
 	      if (this.initialised && isEnabled) {
 	        this._removeEventListeners();
 	        this.passedElement.setAttribute('disabled', '');
-	        this.input.setAttribute('disabled', '');
-	        this.containerOuter.classList.add(this.config.classNames.disabledState);
-	        this.containerOuter.setAttribute('aria-disabled', 'true');
+	        this.input.disable();
+	        this.container.disable();
 	      }
+
 	      return this;
 	    }
 
@@ -1072,7 +965,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Populate options via ajax callback
 	     * @param  {Function} fn Passed
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -1099,7 +991,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Call change callback
 	     * @param  {String} value - last added/deleted/selected value
 	     * @return
-	     * @private
 	     */
 
 	  }, {
@@ -1113,120 +1004,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * Process enter/click of an item button
-	     * @param {Array} activeItems The currently active items
-	     * @param  {Element} element Button being interacted with
-	     * @return
-	     * @private
-	     */
-
-	  }, {
-	    key: '_handleButtonAction',
-	    value: function _handleButtonAction(activeItems, element) {
-	      if (!activeItems || !element) return;
-
-	      // If we are clicking on a button
-	      if (this.config.removeItems && this.config.removeItemButton) {
-	        var itemId = element.parentNode.getAttribute('data-id');
-	        var itemToRemove = activeItems.find(function (item) {
-	          return item.id === parseInt(itemId, 10);
-	        });
-
-	        // Remove item associated with button
-	        this._removeItem(itemToRemove);
-	        this._triggerChange(itemToRemove.value);
-
-	        if (this.passedElement.type === 'select-one') {
-	          var placeholder = this.config.placeholder ? this.config.placeholderValue || this.passedElement.getAttribute('placeholder') : false;
-	          if (placeholder) {
-	            var placeholderItem = this._getTemplate('placeholder', placeholder);
-	            this.itemList.appendChild(placeholderItem);
-	          }
-	        }
-	      }
-	    }
-
-	    /**
-	     * Process click of an item
-	     * @param {Array} activeItems The currently active items
-	     * @param  {Element} element Item being interacted with
-	     * @param  {Boolean} hasShiftKey Whether the user has the shift key active
-	     * @return
-	     * @private
-	     */
-
-	  }, {
-	    key: '_handleItemAction',
-	    value: function _handleItemAction(activeItems, element) {
-	      var _this14 = this;
-
-	      var hasShiftKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-	      if (!activeItems || !element) return;
-
-	      // If we are clicking on an item
-	      if (this.config.removeItems && this.passedElement.type !== 'select-one') {
-	        var passedId = element.getAttribute('data-id');
-
-	        // We only want to select one item with a click
-	        // so we deselect any items that aren't the target
-	        // unless shift is being pressed
-	        activeItems.forEach(function (item) {
-	          if (item.id === parseInt(passedId, 10) && !item.highlighted) {
-	            _this14.highlightItem(item);
-	          } else if (!hasShiftKey) {
-	            if (item.highlighted) {
-	              _this14.unhighlightItem(item);
-	            }
-	          }
-	        });
-
-	        // Focus input as without focus, a user cannot do anything with a
-	        // highlighted item
-	        if (document.activeElement !== this.input) this.input.focus();
-	      }
-	    }
-
-	    /**
-	     * Process click of a choice
-	     * @param {Array} activeItems The currently active items
-	     * @param  {Element} element Choice being interacted with
-	     * @return {[type]}             [description]
-	     */
-
-	  }, {
-	    key: '_handleChoiceAction',
-	    value: function _handleChoiceAction(activeItems, element) {
-	      if (!activeItems || !element) return;
-
-	      // If we are clicking on an option
-	      var id = element.getAttribute('data-id');
-	      var choice = this.store.getChoiceById(id);
-	      var hasActiveDropdown = this.dropdown.classList.contains(this.config.classNames.activeState);
-
-	      if (choice && !choice.selected && !choice.disabled) {
-	        var canAddItem = this._canAddItem(activeItems, choice.value);
-
-	        if (canAddItem.response) {
-	          this._addItem(choice.value, choice.label, choice.id, choice.groupId);
-	          this._triggerChange(choice.value);
-	        }
-	      }
-
-	      this.clearInput(this.passedElement);
-
-	      // We wont to close the dropdown if we are dealing with a single select box
-	      if (hasActiveDropdown && this.passedElement.type === 'select-one') {
-	        this.hideDropdown();
-	        this.containerOuter.focus();
-	      }
-	    }
-
-	    /**
 	     * Process back space event
 	     * @param  {Array} activeItems items
 	     * @return
-	     * @private
 	     */
 
 	  }, {
@@ -1241,8 +1021,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // If editing the last item is allowed and there are not other selected items,
 	        // we can edit the item value. Otherwise if we can remove items, remove all selected items
 	        if (this.config.editItems && !hasHighlightedItems && lastItem) {
-	          this.input.value = lastItem.value;
-	          this._setInputWidth();
+	          this.input.setValue(lastItem.value);
+	          this.input.setInputWidth();
 	          this._removeItem(lastItem);
 	          this._triggerChange(lastItem.value);
 	        } else {
@@ -1269,7 +1049,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var notice = (0, _utils.isType)('Function', this.config.addItemText) ? this.config.addItemText(value) : this.config.addItemText;
 
 	      if (this.passedElement.type === 'select-multiple' || this.passedElement.type === 'text') {
-	        if (this.config.maxItemCount > 0 && this.config.maxItemCount <= this.itemList.children.length) {
+	        if (this.config.maxItemCount > 0 && this.config.maxItemCount <= this.itemList.element.children.length) {
 	          // If there is a max entry limit and we have reached that limit
 	          // don't update
 	          canAddItem = false;
@@ -1307,7 +1087,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Apply or remove a loading state to the component.
 	     * @param {Boolean} isLoading default value set to 'true'.
 	     * @return
-	     * @private
 	     */
 
 	  }, {
@@ -1315,28 +1094,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function _handleLoadingState() {
 	      var isLoading = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
-	      var placeholderItem = this.itemList.querySelector('.' + this.config.classNames.placeholder);
+	      var placeholderItem = this.itemList.element.querySelector('.' + this.config.classNames.placeholder);
+
 	      if (isLoading) {
-	        this.containerOuter.classList.add(this.config.classNames.loadingState);
-	        this.containerOuter.setAttribute('aria-busy', 'true');
+	        this.container.startLoader();
 	        if (this.passedElement.type === 'select-one') {
 	          if (!placeholderItem) {
 	            placeholderItem = this._getTemplate('placeholder', this.config.loadingText);
-	            this.itemList.appendChild(placeholderItem);
+	            this.itemList.element.appendChild(placeholderItem);
 	          } else {
 	            placeholderItem.innerHTML = this.config.loadingText;
 	          }
 	        } else {
-	          this.input.placeholder = this.config.loadingText;
+	          this.input.element.placeholder = this.config.loadingText;
 	        }
 	      } else {
 	        // Remove loading states/text
-	        this.containerOuter.classList.remove(this.config.classNames.loadingState);
+	        this.container.stopLoader();
+
 	        var placeholder = this.config.placeholder ? this.config.placeholderValue || this.passedElement.getAttribute('placeholder') : false;
+
 	        if (this.passedElement.type === 'select-one') {
 	          placeholderItem.innerHTML = placeholder || '';
 	        } else {
-	          this.input.placeholder = placeholder || '';
+	          this.input.element.placeholder = placeholder || '';
 	        }
 	      }
 	    }
@@ -1344,13 +1125,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Retrieve the callback used to populate component's choices in an async way.
 	     * @returns {Function} The callback as a function.
-	     * @private
 	     */
 
 	  }, {
 	    key: '_ajaxCallback',
 	    value: function _ajaxCallback() {
-	      var _this15 = this;
+	      var _this14 = this;
 
 	      return function (results, value, label) {
 	        if (!results || !value) return;
@@ -1359,23 +1139,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        if (parsedResults && (0, _utils.isType)('Array', parsedResults) && parsedResults.length) {
 	          // Remove loading states/text
-	          _this15._handleLoadingState(false);
+	          _this14._handleLoadingState(false);
 	          // Add each result as a choice
 	          parsedResults.forEach(function (result, index) {
 	            var isSelected = result.selected ? result.selected : false;
 	            var isDisabled = result.disabled ? result.disabled : false;
 	            if (result.choices) {
-	              _this15._addGroup(result, result.id || null, value, label);
+	              _this14._addGroup(result, result.id || null, value, label);
 	            } else {
-	              _this15._addChoice(isSelected, isDisabled, result[value], result[label]);
+	              _this14._addChoice(isSelected, isDisabled, result[value], result[label]);
 	            }
 	          });
 	        } else {
 	          // No results, remove loading state
-	          _this15._handleLoadingState(false);
+	          _this14._handleLoadingState(false);
 	        }
-
-	        _this15.containerOuter.removeAttribute('aria-busy');
 	      };
 	    }
 
@@ -1383,7 +1161,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Filter choices based on search value
 	     * @param  {String} value Value to filter by
 	     * @return
-	     * @private
 	     */
 
 	  }, {
@@ -1412,7 +1189,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Determine the action when a user is searching
 	     * @param  {String} value Value entered by user
 	     * @return
-	     * @private
 	     */
 
 	  }, {
@@ -1425,7 +1201,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 
 	      // Run callback if it is a function
-	      if (this.input === document.activeElement) {
+	      if (this.input.element === document.activeElement) {
 	        // Check that we have a value to search and the input was an alphanumeric character
 	        if (value && value.length > this.config.searchFloor) {
 	          // Filter available choices
@@ -1445,7 +1221,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Trigger event listeners
 	     * @return
-	     * @private
 	     */
 
 	  }, {
@@ -1460,20 +1235,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      document.addEventListener('mouseover', this._onMouseOver);
 
 	      if (this.passedElement.type && this.passedElement.type === 'select-one') {
-	        this.containerOuter.addEventListener('focus', this._onFocus);
-	        this.containerOuter.addEventListener('blur', this._onBlur);
+	        this.container.outer.addEventListener('focus', this._onFocus);
+	        this.container.outer.addEventListener('blur', this._onBlur);
 	      }
 
-	      this.input.addEventListener('input', this._onInput);
-	      this.input.addEventListener('paste', this._onPaste);
-	      this.input.addEventListener('focus', this._onFocus);
-	      this.input.addEventListener('blur', this._onBlur);
+	      this.input.element.addEventListener('input', this._onInput);
+	      this.input.element.addEventListener('paste', this._onPaste);
+	      this.input.element.addEventListener('focus', this._onFocus);
+	      this.input.element.addEventListener('blur', this._onBlur);
 	    }
 
 	    /**
 	     * Remove event listeners
 	     * @return
-	     * @private
 	     */
 
 	  }, {
@@ -1488,35 +1262,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	      document.removeEventListener('mouseover', this._onMouseOver);
 
 	      if (this.passedElement.type && this.passedElement.type === 'select-one') {
-	        this.containerOuter.removeEventListener('focus', this._onFocus);
-	        this.containerOuter.removeEventListener('blur', this._onBlur);
+	        this.container.outer.removeEventListener('focus', this._onFocus);
+	        this.container.outer.removeEventListener('blur', this._onBlur);
 	      }
 
-	      this.input.removeEventListener('input', this._onInput);
-	      this.input.removeEventListener('paste', this._onPaste);
-	      this.input.removeEventListener('focus', this._onFocus);
-	      this.input.removeEventListener('blur', this._onBlur);
+	      this.input.element.removeEventListener('input', this._onInput);
+	      this.input.element.removeEventListener('paste', this._onPaste);
+	      this.input.element.removeEventListener('focus', this._onFocus);
+	      this.input.element.removeEventListener('blur', this._onBlur);
 	    }
-
-	    /**
-	     * Set the correct input width based on placeholder
-	     * value or input value
-	     * @return
-	     */
-
 	  }, {
-	    key: '_setInputWidth',
-	    value: function _setInputWidth() {
-	      if (this.config.placeholder && (this.config.placeholderValue || this.passedElement.getAttribute('placeholder'))) {
-	        // If there is a placeholder, we only want to set the width of the input when it is a greater
-	        // length than 75% of the placeholder. This stops the input jumping around.
-	        var placeholder = this.config.placeholder ? this.config.placeholderValue || this.passedElement.getAttribute('placeholder') : false;
-	        if (this.input.value && this.input.value.length >= placeholder.length / 1.25) {
-	          this.input.style.width = (0, _utils.getWidthOfInput)(this.input);
-	        }
-	      } else {
-	        // If there is no placeholder, resize input to contents
-	        this.input.style.width = (0, _utils.getWidthOfInput)(this.input);
+	    key: '_resetSearch',
+	    value: function _resetSearch() {
+	      if (this.passedElement.type !== 'text' && this.config.search) {
+	        this.isSearching = false;
+	        this.store.dispatch((0, _index3.activateChoices)(true));
 	      }
 	    }
 
@@ -1529,17 +1289,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_onKeyDown',
 	    value: function _onKeyDown(e) {
-	      var _this16 = this,
+	      var _this15 = this,
 	          _keyDownActions;
 
-	      if (e.target !== this.input && !this.containerOuter.contains(e.target)) return;
+	      if (e.target !== this.input.element && !this.container.outer.contains(e.target)) {
+	        return;
+	      }
 
 	      var target = e.target;
 	      var passedElementType = this.passedElement.type;
 	      var activeItems = this.store.getItemsFilteredByActive();
-	      var hasFocusedInput = this.input === document.activeElement;
-	      var hasActiveDropdown = this.dropdown.classList.contains(this.config.classNames.activeState);
-	      var hasItems = this.itemList && this.itemList.children;
+	      var hasFocusedInput = this.input.element === document.activeElement;
+	      var hasActiveDropdown = this.dropdown.active;
+	      var hasItems = this.itemList.element && this.itemList.element.children;
 	      var keyString = String.fromCharCode(e.keyCode);
 
 	      var backKey = 46;
@@ -1555,7 +1317,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      // If a user is typing and the dropdown is not active
 	      if (passedElementType !== 'text' && /[a-zA-Z0-9-_ ]/.test(keyString) && !hasActiveDropdown) {
-	        this.showDropdown(true);
+	        this.dropdown.show(true);
 	      }
 
 	      this.canSearch = this.config.search;
@@ -1563,10 +1325,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var onAKey = function onAKey() {
 	        // If CTRL + A or CMD + A have been pressed and there are items to select
 	        if (ctrlDownKey && hasItems) {
-	          _this16.canSearch = false;
-	          if (_this16.config.removeItems && !_this16.input.value && _this16.input === document.activeElement) {
+	          _this15.canSearch = false;
+	          if (_this15.config.removeItems && !_this15.input.element.value && _this15.input.element === document.activeElement) {
 	            // Highlight items
-	            _this16.highlightAll(_this16.itemList.children);
+	            _this15.highlightAll(_this15.itemList.element.children);
 	          }
 	        }
 	      };
@@ -1574,37 +1336,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var onEnterKey = function onEnterKey() {
 	        // If enter key is pressed and the input has a value
 	        if (passedElementType === 'text' && target.value) {
-	          var value = _this16.input.value;
-	          var canAddItem = _this16._canAddItem(activeItems, value);
+	          var value = _this15.input.element.value;
+	          var canAddItem = _this15._canAddItem(activeItems, value);
 
 	          // All is good, add
 	          if (canAddItem.response) {
 	            if (hasActiveDropdown) {
-	              _this16.hideDropdown();
+	              _this15.dropdown.hide();
 	            }
-	            _this16._addItem(value);
-	            _this16._triggerChange(value);
-	            _this16.clearInput(_this16.passedElement);
+	            _this15._addItem(value);
+	            _this15._triggerChange(value);
+	            _this15.input.clearInput();
+	            _this15._resetSearch();
 	          }
 	        }
 
 	        if (target.hasAttribute('data-button')) {
-	          _this16._handleButtonAction(activeItems, target);
+	          _this15.itemList.handleButtonAction(activeItems, target);
 	          e.preventDefault();
 	        }
 
 	        if (hasActiveDropdown) {
 	          e.preventDefault();
-	          var highlighted = _this16.dropdown.querySelector('.' + _this16.config.classNames.highlightedState);
+	          var highlighted = _this15.dropdown.getHighlighted();
 
 	          // If we have a highlighted choice
 	          if (highlighted) {
-	            _this16._handleChoiceAction(activeItems, highlighted);
+	            _this15.choiceList.handleChoiceAction(activeItems, highlighted);
+	            _this15._resetSearch();
 	          }
 	        } else if (passedElementType === 'select-one') {
 	          // Open single select dropdown if it's not active
 	          if (!hasActiveDropdown) {
-	            _this16.showDropdown(true);
+	            _this15.dropdown.show(true);
 	            e.preventDefault();
 	          }
 	        }
@@ -1612,7 +1376,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var onEscapeKey = function onEscapeKey() {
 	        if (hasActiveDropdown) {
-	          _this16.toggleDropdown();
+	          _this15.dropdown.toggle();
 	        }
 	      };
 
@@ -1621,10 +1385,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (hasActiveDropdown || passedElementType === 'select-one') {
 	          // Show dropdown if focus
 	          if (!hasActiveDropdown) {
-	            _this16.showDropdown(true);
+	            _this15.dropdown.show(true);
 	          }
 
-	          _this16.canSearch = false;
+	          _this15.canSearch = false;
 
 	          var directionInt = e.keyCode === downKey || e.keyCode === pageDownKey ? 1 : -1;
 	          var skipKey = e.metaKey || e.keyCode === pageDownKey || e.keyCode === pageUpKey;
@@ -1632,26 +1396,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var nextEl = void 0;
 	          if (skipKey) {
 	            if (directionInt > 0) {
-	              nextEl = Array.from(_this16.dropdown.querySelectorAll('[data-choice-selectable]')).pop();
+	              nextEl = Array.from(_this15.dropdown.element.querySelectorAll('[data-choice-selectable]')).pop();
 	            } else {
-	              nextEl = _this16.dropdown.querySelector('[data-choice-selectable]');
+	              nextEl = _this15.dropdown.element.querySelector('[data-choice-selectable]');
 	            }
 	          } else {
-	            var currentEl = _this16.dropdown.querySelector('.' + _this16.config.classNames.highlightedState);
+	            var currentEl = _this15.dropdown.getHighlighted();
 	            if (currentEl) {
 	              nextEl = (0, _utils.getAdjacentEl)(currentEl, '[data-choice-selectable]', directionInt);
 	            } else {
-	              nextEl = _this16.dropdown.querySelector('[data-choice-selectable]');
+	              nextEl = _this15.dropdown.element.querySelector('[data-choice-selectable]');
 	            }
 	          }
 
 	          if (nextEl) {
 	            // We prevent default to stop the cursor moving
 	            // when pressing the arrow
-	            if (!(0, _utils.isScrolledIntoView)(nextEl, _this16.choiceList, directionInt)) {
-	              _this16._scrollToChoice(nextEl, directionInt);
+	            if (!(0, _utils.isScrolledIntoView)(nextEl, _this15.choiceList, directionInt)) {
+	              _this15.choiceList.scrollToChoice(nextEl, directionInt);
 	            }
-	            _this16._highlightChoice(nextEl);
+	            _this15.choiceList.highlightChoice(nextEl);
 	          }
 
 	          // Prevent default to maintain cursor position whilst
@@ -1663,7 +1427,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var onDeleteKey = function onDeleteKey() {
 	        // If backspace or delete key is pressed and the input has no value
 	        if (hasFocusedInput && !e.target.value && passedElementType !== 'select-one') {
-	          _this16._handleBackspace(activeItems);
+	          _this15._handleBackspace(activeItems);
 	          e.preventDefault();
 	        }
 	      };
@@ -1681,19 +1445,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Key up event
 	     * @param  {Object} e Event
 	     * @return
-	     * @private
 	     */
 
 	  }, {
 	    key: '_onKeyUp',
 	    value: function _onKeyUp(e) {
-	      if (e.target !== this.input) return;
+	      if (e.target !== this.input.element) {
+	        return;
+	      }
 
 	      // We are typing into a text input and have a value, we want to show a dropdown
 	      // notice. Otherwise hide the dropdown
 	      if (this.isTextElement) {
-	        var hasActiveDropdown = this.dropdown.classList.contains(this.config.classNames.activeState);
-	        var value = this.input.value;
+	        var hasActiveDropdown = this.dropdown.active;
+	        var value = this.input.element.value;
 
 	        if (value) {
 	          var activeItems = this.store.getItemsFilteredByActive();
@@ -1701,18 +1466,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          if (canAddItem.notice) {
 	            var dropdownItem = this._getTemplate('notice', canAddItem.notice);
-	            this.dropdown.innerHTML = dropdownItem.outerHTML;
+	            this.dropdown.element.innerHTML = dropdownItem.outerHTML;
 	          }
 
 	          if (canAddItem.response === true) {
 	            if (!hasActiveDropdown) {
-	              this.showDropdown();
+	              this.dropdown.show();
 	            }
 	          } else if (!canAddItem.notice && hasActiveDropdown) {
-	            this.hideDropdown();
+	            this.dropdown.hide();
 	          }
 	        } else if (hasActiveDropdown) {
-	          this.hideDropdown();
+	          this.dropdown.hide();
 	        }
 	      } else {
 	        var backKey = 46;
@@ -1726,7 +1491,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.store.dispatch((0, _index3.activateChoices)(true));
 	          }
 	        } else if (this.canSearch) {
-	          this._handleSearch(this.input.value);
+	          this._handleSearch(this.input.element.value);
 	        }
 	      }
 	    }
@@ -1735,14 +1500,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Input event
 	     * @param  {Object} e Event
 	     * @return
-	     * @private
 	     */
 
 	  }, {
 	    key: '_onInput',
 	    value: function _onInput() {
 	      if (this.passedElement.type !== 'select-one') {
-	        this._setInputWidth();
+	        this.input.setInputWidth();
 	      }
 	    }
 
@@ -1750,7 +1514,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Touch move event
 	     * @param  {Object} e Event
 	     * @return
-	     * @private
 	     */
 
 	  }, {
@@ -1765,29 +1528,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Touch end event
 	     * @param  {Object} e Event
 	     * @return
-	     * @private
 	     */
 
 	  }, {
 	    key: '_onTouchEnd',
 	    value: function _onTouchEnd(e) {
 	      var target = e.target || e.touches[0].target;
-	      var hasActiveDropdown = this.dropdown.classList.contains(this.config.classNames.activeState);
+	      var hasActiveDropdown = this.dropdown.active;
 
 	      // If a user tapped within our container...
-	      if (this.wasTap === true && this.containerOuter.contains(target)) {
+	      if (this.wasTap === true && this.container.outer.contains(target)) {
 	        // ...and we aren't dealing with a single select box, show dropdown/focus input
-	        if ((target === this.containerOuter || target === this.containerInner) && this.passedElement.type !== 'select-one') {
+	        if ((target === this.container.outer || target === this.container.inner) && this.passedElement.type !== 'select-one') {
 	          if (this.isTextElement) {
 	            // If text element, we only want to focus the input (if it isn't already)
-	            if (document.activeElement !== this.input) {
+	            if (document.activeElement !== this.input.element) {
 	              this.input.focus();
 	            }
-	          } else {
-	            if (!hasActiveDropdown) {
-	              // If a select box, we want to show the dropdown
-	              this.showDropdown(true);
-	            }
+	          } else if (!hasActiveDropdown) {
+	            // If a select box, we want to show the dropdown
+	            this.dropdown.show(true);
 	          }
 	        }
 	        // Prevents focus event firing
@@ -1801,21 +1561,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Mouse down event
 	     * @param  {Object} e Event
 	     * @return
-	     * @private
 	     */
 
 	  }, {
 	    key: '_onMouseDown',
 	    value: function _onMouseDown(e) {
 	      var target = e.target;
-	      if (this.containerOuter.contains(target) && target !== this.input) {
+	      if (this.container.outer.contains(target) && target !== this.input.element) {
 	        var activeItems = this.store.getItemsFilteredByActive();
 	        var hasShiftKey = e.shiftKey;
 
 	        if (target.hasAttribute('data-item')) {
-	          this._handleItemAction(activeItems, target, hasShiftKey);
+	          this.itemList.handleItemAction(activeItems, target, hasShiftKey);
 	        } else if (target.hasAttribute('data-choice')) {
-	          this._handleChoiceAction(activeItems, target);
+	          this.choiceList.handleChoiceAction(activeItems, target);
+	          this._resetSearch();
 	        }
 
 	        e.preventDefault();
@@ -1826,38 +1586,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Click event
 	     * @param  {Object} e Event
 	     * @return
-	     * @private
 	     */
 
 	  }, {
 	    key: '_onClick',
 	    value: function _onClick(e) {
 	      var target = e.target;
-	      var hasActiveDropdown = this.dropdown.classList.contains(this.config.classNames.activeState);
+	      var hasActiveDropdown = this.dropdown.active;
 	      var activeItems = this.store.getItemsFilteredByActive();
 
 	      // If target is something that concerns us
-	      if (this.containerOuter.contains(target)) {
+	      if (this.container.outer.contains(target)) {
 	        // Handle button delete
 	        if (target.hasAttribute('data-button')) {
-	          this._handleButtonAction(activeItems, target);
+	          this.itemList.handleButtonAction(activeItems, target);
 	        }
 
 	        if (!hasActiveDropdown) {
 	          if (this.isTextElement) {
-	            if (document.activeElement !== this.input) {
+	            if (document.activeElement !== this.input.element) {
 	              this.input.focus();
 	            }
 	          } else {
 	            if (this.canSearch) {
-	              this.showDropdown(true);
+	              this.dropdown.show(true);
 	            } else {
-	              this.showDropdown();
-	              this.containerOuter.focus();
+	              this.dropdown.show();
+	              this.container.outer.focus();
 	            }
 	          }
-	        } else if (this.passedElement.type === 'select-one' && target !== this.input && !this.dropdown.contains(target)) {
-	          this.hideDropdown(true);
+	        } else if (this.passedElement.type === 'select-one' && target !== this.input.element && !this.dropdown.element.contains(target)) {
+	          this.dropdown.hide(true);
 	        }
 	      } else {
 	        var hasHighlightedItems = activeItems.some(function (item) {
@@ -1870,11 +1629,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        // Remove focus state
-	        this.containerOuter.classList.remove(this.config.classNames.focusState);
+	        this.container.blur();
 
 	        // Close all other dropdowns
 	        if (hasActiveDropdown) {
-	          this.hideDropdown();
+	          this.dropdown.hide();
 	        }
 	      }
 	    }
@@ -1883,15 +1642,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Mouse over (hover) event
 	     * @param  {Object} e Event
 	     * @return
-	     * @private
 	     */
 
 	  }, {
 	    key: '_onMouseOver',
 	    value: function _onMouseOver(e) {
 	      // If the dropdown is either the target or one of its children is the target
-	      if (e.target === this.dropdown || this.dropdown.contains(e.target)) {
-	        if (e.target.hasAttribute('data-choice')) this._highlightChoice(e.target);
+	      if (e.target === this.dropdown.element || this.dropdown.element.contains(e.target)) {
+	        if (e.target.hasAttribute('data-choice')) {
+	          this.choiceList.highlightChoice(e.target);
+	        }
 	      }
 	    }
 
@@ -1899,14 +1659,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Paste event
 	     * @param  {Object} e Event
 	     * @return
-	     * @private
 	     */
 
 	  }, {
 	    key: '_onPaste',
 	    value: function _onPaste(e) {
 	      // Disable pasting into the input if option has been set
-	      if (e.target === this.input && !this.config.paste) {
+	      if (e.target === this.input.element && !this.config.paste) {
 	        e.preventDefault();
 	      }
 	    }
@@ -1915,41 +1674,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Focus event
 	     * @param  {Object} e Event
 	     * @return
-	     * @private
 	     */
 
 	  }, {
 	    key: '_onFocus',
 	    value: function _onFocus(e) {
-	      var _this17 = this;
+	      var _this16 = this;
 
 	      var target = e.target;
 	      // If target is something that concerns us
-	      if (this.containerOuter.contains(target)) {
-	        var hasActiveDropdown = this.dropdown.classList.contains(this.config.classNames.activeState);
+	      if (this.container.outer.contains(target)) {
+	        var hasActiveDropdown = this.dropdown.active;
 	        var focusActions = {
 	          text: function text() {
-	            if (target === _this17.input) {
-	              _this17.containerOuter.classList.add(_this17.config.classNames.focusState);
+	            if (target === _this16.input.element) {
+	              _this16.container.focus();
 	            }
 	          },
 	          'select-one': function selectOne() {
-	            _this17.containerOuter.classList.add(_this17.config.classNames.focusState);
-	            if (target === _this17.input) {
+	            _this16.container.focus();
+	            if (target === _this16.input.element) {
 	              // Show dropdown if it isn't already showing
 	              if (!hasActiveDropdown) {
-	                _this17.showDropdown();
+	                _this16.dropdown.show();
 	              }
 	            }
 	          },
 	          'select-multiple': function selectMultiple() {
-	            if (target === _this17.input) {
+	            if (target === _this16.input.element) {
 	              // If element is a select box, the focussed element is the container and the dropdown
 	              // isn't already open, focus and show dropdown
-	              _this17.containerOuter.classList.add(_this17.config.classNames.focusState);
+	              _this16.container.focus();
 
 	              if (!hasActiveDropdown) {
-	                _this17.showDropdown(true);
+	                _this16.dropdown.show(true);
 	              }
 	            }
 	          }
@@ -1963,63 +1721,62 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Blur event
 	     * @param  {Object} e Event
 	     * @return
-	     * @private
 	     */
 
 	  }, {
 	    key: '_onBlur',
 	    value: function _onBlur(e) {
-	      var _this18 = this;
+	      var _this17 = this;
 
 	      var target = e.target;
 	      // If target is something that concerns us
-	      if (this.containerOuter.contains(target)) {
+	      if (this.container.outer.contains(target)) {
 	        var activeItems = this.store.getItemsFilteredByActive();
-	        var hasActiveDropdown = this.dropdown.classList.contains(this.config.classNames.activeState);
+	        var hasActiveDropdown = this.dropdown.active;
 	        var hasHighlightedItems = activeItems.some(function (item) {
 	          return item.highlighted === true;
 	        });
 	        var blurActions = {
 	          text: function text() {
-	            if (target === _this18.input) {
+	            if (target === _this17.input.element) {
 	              // Remove the focus state
-	              _this18.containerOuter.classList.remove(_this18.config.classNames.focusState);
+	              _this17.container.blur();
 	              // De-select any highlighted items
 	              if (hasHighlightedItems) {
-	                _this18.unhighlightAll();
+	                _this17.unhighlightAll();
 	              }
 	              // Hide dropdown if it is showing
 	              if (hasActiveDropdown) {
-	                _this18.hideDropdown();
+	                _this17.dropdown.hide();
 	              }
 	            }
 	          },
 	          'select-one': function selectOne() {
-	            _this18.containerOuter.classList.remove(_this18.config.classNames.focusState);
-	            if (target === _this18.containerOuter) {
+	            _this17.container.blur();
+	            if (target === _this17.container.outer) {
 	              // Hide dropdown if it is showing
-	              if (hasActiveDropdown && !_this18.canSearch) {
-	                _this18.hideDropdown();
+	              if (hasActiveDropdown && !_this17.canSearch) {
+	                _this17.dropdown.hide();
 	              }
 	            }
 
-	            if (target === _this18.input) {
+	            if (target === _this17.input.element) {
 	              // Hide dropdown if it is showing
 	              if (hasActiveDropdown) {
-	                _this18.hideDropdown();
+	                _this17.dropdown.hide();
 	              }
 	            }
 	          },
 	          'select-multiple': function selectMultiple() {
-	            if (target === _this18.input) {
+	            if (target === _this17.input.element) {
 	              // Remove the focus state
-	              _this18.containerOuter.classList.remove(_this18.config.classNames.focusState);
+	              _this17.container.blur();
 	              if (hasActiveDropdown) {
-	                _this18.hideDropdown();
+	                _this17.dropdown.hide();
 	              }
 	              // De-select any highlighted items
 	              if (hasHighlightedItems) {
-	                _this18.unhighlightAll();
+	                _this17.unhighlightAll();
 	              }
 	            }
 	          }
@@ -2033,7 +1790,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Tests value against a regular expression
 	     * @param  {string} value   Value to test
 	     * @return {Boolean}        Whether test passed/failed
-	     * @private
 	     */
 
 	  }, {
@@ -2046,119 +1802,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * Scroll to an option element
-	     * @param  {HTMLElement} option  Option to scroll to
-	     * @param  {Number} direction  Whether option is above or below
-	     * @return
-	     * @private
-	     */
-
-	  }, {
-	    key: '_scrollToChoice',
-	    value: function _scrollToChoice(choice, direction) {
-	      var _this19 = this;
-
-	      if (!choice) return;
-
-	      var dropdownHeight = this.choiceList.offsetHeight;
-	      var choiceHeight = choice.offsetHeight;
-	      // Distance from bottom of element to top of parent
-	      var choicePos = choice.offsetTop + choiceHeight;
-	      // Scroll position of dropdown
-	      var containerScrollPos = this.choiceList.scrollTop + dropdownHeight;
-	      // Difference between the choice and scroll position
-	      var endPoint = direction > 0 ? this.choiceList.scrollTop + choicePos - containerScrollPos : choice.offsetTop;
-
-	      var animateScroll = function animateScroll() {
-	        var strength = 4;
-	        var choiceListScrollTop = _this19.choiceList.scrollTop;
-	        var continueAnimation = false;
-	        var easing = void 0;
-	        var distance = void 0;
-
-	        if (direction > 0) {
-	          easing = (endPoint - choiceListScrollTop) / strength;
-	          distance = easing > 1 ? easing : 1;
-
-	          _this19.choiceList.scrollTop = choiceListScrollTop + distance;
-	          if (choiceListScrollTop < endPoint) {
-	            continueAnimation = true;
-	          }
-	        } else {
-	          easing = (choiceListScrollTop - endPoint) / strength;
-	          distance = easing > 1 ? easing : 1;
-
-	          _this19.choiceList.scrollTop = choiceListScrollTop - distance;
-	          if (choiceListScrollTop > endPoint) {
-	            continueAnimation = true;
-	          }
-	        }
-
-	        if (continueAnimation) {
-	          requestAnimationFrame(function (time) {
-	            animateScroll(time, endPoint, direction);
-	          });
-	        }
-	      };
-
-	      requestAnimationFrame(function (time) {
-	        animateScroll(time, endPoint, direction);
-	      });
-	    }
-
-	    /**
-	     * Highlight choice
-	     * @param  {HTMLElement} el Element to highlight
-	     * @return
-	     * @private
-	     */
-
-	  }, {
-	    key: '_highlightChoice',
-	    value: function _highlightChoice(el) {
-	      var _this20 = this;
-
-	      // Highlight first element in dropdown
-	      var choices = Array.from(this.dropdown.querySelectorAll('[data-choice-selectable]'));
-
-	      if (choices && choices.length) {
-	        var highlightedChoices = Array.from(this.dropdown.querySelectorAll('.' + this.config.classNames.highlightedState));
-
-	        // Remove any highlighted choices
-	        highlightedChoices.forEach(function (choice) {
-	          choice.classList.remove(_this20.config.classNames.highlightedState);
-	          choice.setAttribute('aria-selected', 'false');
-	        });
-
-	        if (el) {
-	          // Highlight given option
-	          el.classList.add(this.config.classNames.highlightedState);
-	          this.highlightPosition = choices.indexOf(el);
-	        } else {
-	          // Highlight choice based on last known highlight location
-	          var choice = void 0;
-
-	          if (choices.length > this.highlightPosition) {
-	            // If we have an option to highlight
-	            choice = choices[this.highlightPosition];
-	          } else {
-	            // Otherwise highlight the option before
-	            choice = choices[choices.length - 1];
-	          }
-
-	          if (!choice) choice = choices[0];
-	          choice.classList.add(this.config.classNames.highlightedState);
-	          choice.setAttribute('aria-selected', 'true');
-	        }
-	      }
-	    }
-
-	    /**
 	     * Add item to store with correct value
 	     * @param {String} value Value to add to store
 	     * @param {String} label Label to add to store
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -2218,7 +1865,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {Object} item Item to remove
 	     * @param {Function} callback Callback to trigger
 	     * @return {Object} Class instance
-	     * @public
 	     */
 
 	  }, {
@@ -2264,7 +1910,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {String} Label Label of choice
 	     * @param {Number} groupId ID of group choice is within. Negative number indicates no group
 	     * @return
-	     * @private
 	     */
 
 	  }, {
@@ -2289,7 +1934,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Clear all choices added to the store.
 	     * @return
-	     * @private
 	     */
 
 	  }, {
@@ -2305,13 +1949,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {String} [valueKey] name of the value property on the object
 	     * @param {String} [labelKey] name of the label property on the object
 	     * @return
-	     * @private
 	     */
 
 	  }, {
 	    key: '_addGroup',
 	    value: function _addGroup(group, id) {
-	      var _this21 = this;
+	      var _this18 = this;
 
 	      var valueKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'value';
 	      var labelKey = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'label';
@@ -2334,7 +1977,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            label = option.innerHTML;
 	          }
 
-	          _this21._addChoice(isOptSelected, isOptDisabled, option[valueKey], label, groupId);
+	          _this18._addChoice(isOptSelected, isOptDisabled, option[valueKey], label, groupId);
 	        });
 	      } else {
 	        this.store.dispatch((0, _index3.addGroup)(group.label, group.id, false, group.disabled));
@@ -2346,7 +1989,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {String}    template Name of template to get
 	     * @param  {...}       args     Data to pass to template
 	     * @return {HTMLElement}        Template
-	     * @private
 	     */
 
 	  }, {
@@ -2365,54 +2007,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Create HTML element based on type and arguments
 	     * @return
-	     * @private
 	     */
 
 	  }, {
 	    key: '_createTemplates',
 	    value: function _createTemplates() {
-	      var _this22 = this;
+	      var _this19 = this;
 
 	      var classNames = this.config.classNames;
 	      var templates = {
 	        containerOuter: function containerOuter(direction) {
-	          return (0, _utils.strToEl)('\n            <div class="' + classNames.containerOuter + '" data-type="' + _this22.passedElement.type + '" ' + (_this22.passedElement.type === 'select-one' ? 'tabindex="0"' : '') + ' aria-haspopup="true" aria-expanded="false" dir="' + direction + '"></div>\n          ');
+	          return (0, _utils.strToEl)('\n          <div\n            class="' + classNames.containerOuter + '"\n            data-type="' + _this19.passedElement.type + '"\n            ' + (_this19.passedElement.type === 'select-one' ? 'tabindex="0"' : '') + '\n            aria-haspopup="true"\n            aria-expanded="false"\n            dir="' + direction + '"\n            >\n            </div>\n        ');
 	        },
 	        containerInner: function containerInner() {
-	          return (0, _utils.strToEl)('\n            <div class="' + classNames.containerInner + '"></div>\n          ');
+	          return (0, _utils.strToEl)('\n          <div class="' + classNames.containerInner + '"></div>\n        ');
 	        },
 	        itemList: function itemList() {
-	          return (0, _utils.strToEl)('\n            <div class="' + classNames.list + ' ' + (_this22.passedElement.type === 'select-one' ? classNames.listSingle : classNames.listItems) + '"></div>\n          ');
+	          return (0, _utils.strToEl)('\n          <div class="' + classNames.list + ' ' + (_this19.passedElement.type === 'select-one' ? classNames.listSingle : classNames.listItems) + '"></div>\n        ');
 	        },
 	        placeholder: function placeholder(value) {
-	          return (0, _utils.strToEl)('\n            <div class="' + classNames.placeholder + '">' + value + '</div>\n          ');
+	          return (0, _utils.strToEl)('\n          <div class="' + classNames.placeholder + '">' + value + '</div>\n        ');
 	        },
 	        item: function item(data) {
-	          if (_this22.config.removeItemButton) {
-	            return (0, _utils.strToEl)('\n              <div class="' + classNames.item + ' ' + (data.highlighted ? classNames.highlightedState : '') + ' ' + (!data.disabled ? classNames.itemSelectable : '') + '" data-item data-id="' + data.id + '" data-value="' + data.value + '" ' + (data.active ? 'aria-selected="true"' : '') + ' ' + (data.disabled ? 'aria-disabled="true"' : '') + ' data-deletable>\n              ' + data.label + '<button type="button" class="' + classNames.button + '" data-button>Remove item</button>\n              </div>\n            ');
+	          if (_this19.config.removeItemButton) {
+	            return (0, _utils.strToEl)('\n            <div\n              class="' + classNames.item + ' ' + (data.highlighted ? classNames.highlightedState : '') + ' ' + (!data.disabled ? classNames.itemSelectable : '') + '"\n              data-item\n              data-id="' + data.id + '"\n              data-value="' + data.value + '"\n              ' + (data.active ? 'aria-selected="true"' : '') + '\n              ' + (data.disabled ? 'aria-disabled="true"' : '') + '\n              data-deletable\n              >\n              ' + data.label + '<button type="button" class="' + classNames.button + '" data-button>Remove item</button>\n            </div>\n          ');
 	          }
-	          return (0, _utils.strToEl)('\n          <div class="' + classNames.item + ' ' + (data.highlighted ? classNames.highlightedState : classNames.itemSelectable) + '"  data-item data-id="' + data.id + '" data-value="' + data.value + '" ' + (data.active ? 'aria-selected="true"' : '') + ' ' + (data.disabled ? 'aria-disabled="true"' : '') + '>\n            ' + data.label + '\n          </div>\n          ');
+	          return (0, _utils.strToEl)('\n          <div\n            class="' + classNames.item + ' ' + (data.highlighted ? classNames.highlightedState : classNames.itemSelectable) + '"\n            data-item\n            data-id="' + data.id + '"\n            data-value="' + data.value + '"\n            ' + (data.active ? 'aria-selected="true"' : '') + '\n            ' + (data.disabled ? 'aria-disabled="true"' : '') + '            >\n            ' + data.label + '\n          </div>\n        ');
 	        },
 	        choiceList: function choiceList() {
-	          return (0, _utils.strToEl)('\n            <div class="' + classNames.list + '" dir="ltr" role="listbox" ' + (_this22.passedElement.type !== 'select-one' ? 'aria-multiselectable="true"' : '') + '></div>\n          ');
+	          return (0, _utils.strToEl)('\n          <div\n            class="' + classNames.list + '"\n            dir="ltr"\n            role="listbox"\n            ' + (_this19.passedElement.type !== 'select-one' ? 'aria-multiselectable="true"' : '') + '\n            >\n          </div>\n        ');
 	        },
 	        choiceGroup: function choiceGroup(data) {
-	          return (0, _utils.strToEl)('\n            <div class="' + classNames.group + ' ' + (data.disabled ? classNames.itemDisabled : '') + '" data-group data-id="' + data.id + '" data-value="' + data.value + '" role="group" ' + (data.disabled ? 'aria-disabled="true"' : '') + '>\n              <div class="' + classNames.groupHeading + '">' + data.value + '</div>\n            </div>\n          ');
+	          return (0, _utils.strToEl)('\n          <div\n            class="' + classNames.group + ' ' + (data.disabled ? classNames.itemDisabled : '') + '"\n            data-group\n            data-id="' + data.id + '"\n            data-value="' + data.value + '"\n            role="group"\n            ' + (data.disabled ? 'aria-disabled="true"' : '') + '\n            >\n            <div class="' + classNames.groupHeading + '">' + data.value + '</div>\n          </div>\n        ');
 	        },
 	        choice: function choice(data) {
-	          return (0, _utils.strToEl)('\n          <div class="' + classNames.item + ' ' + classNames.itemChoice + ' ' + (data.disabled ? classNames.itemDisabled : classNames.itemSelectable) + '" data-select-text="' + _this22.config.itemSelectText + '" data-choice ' + (data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable') + ' data-id="' + data.id + '" data-value="' + data.value + '" ' + (data.groupId > 0 ? 'role="treeitem"' : 'role="option"') + '>\n              ' + data.label + '\n            </div>\n          ');
+	          return (0, _utils.strToEl)('\n          <div\n            class="' + classNames.item + ' ' + classNames.itemChoice + ' ' + (data.disabled ? classNames.itemDisabled : classNames.itemSelectable) + '"\n            data-select-text="' + _this19.config.itemSelectText + '"\n            data-choice\n            ' + (data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable') + '\n            data-id="' + data.id + '"\n            data-value="' + data.value + '"\n            ' + (data.groupId > 0 ? 'role="treeitem"' : 'role="option"') + '\n            >\n            ' + data.label + '\n          </div>\n        ');
 	        },
 	        input: function input() {
-	          return (0, _utils.strToEl)('\n          <input type="text" class="' + classNames.input + ' ' + classNames.inputCloned + '" autocomplete="off" autocapitalize="off" spellcheck="false" role="textbox" aria-autocomplete="list">\n          ');
+	          return (0, _utils.strToEl)('\n          <input\n            type="text"\n            class="' + classNames.input + ' ' + classNames.inputCloned + '"\n            autocomplete="off"\n            autocapitalize="off"\n            spellcheck="false"\n            role="textbox"\n            aria-autocomplete="list"\n            >\n        ');
 	        },
 	        dropdown: function dropdown() {
-	          return (0, _utils.strToEl)('\n            <div class="' + classNames.list + ' ' + classNames.listDropdown + '" aria-expanded="false"></div>\n          ');
+	          return (0, _utils.strToEl)('\n          <div\n            class="' + classNames.list + ' ' + classNames.listDropdown + '"\n            aria-expanded="false"\n            >\n          </div>\n        ');
 	        },
 	        notice: function notice(label) {
-	          return (0, _utils.strToEl)('\n            <div class="' + classNames.item + ' ' + classNames.itemChoice + '">' + label + '</div>\n          ');
+	          return (0, _utils.strToEl)('\n          <div class="' + classNames.item + ' ' + classNames.itemChoice + '">' + label + '</div>\n        ');
 	        },
 	        option: function option(data) {
-	          return (0, _utils.strToEl)('\n            <option value="' + data.value + '" selected>' + data.label + '</option>\n          ');
+	          return (0, _utils.strToEl)('\n          <option value="' + data.value + '" selected>' + data.label + '</option>\n        ');
 	        }
 	      };
 
@@ -2429,13 +2070,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Create DOM structure around passed select element
 	     * @return
-	     * @private
 	     */
 
 	  }, {
 	    key: '_createInput',
 	    value: function _createInput() {
-	      var _this23 = this;
+	      var _this20 = this;
 
 	      var direction = this.passedElement.getAttribute('dir') || 'ltr';
 	      var containerOuter = this._getTemplate('containerOuter', direction);
@@ -2446,25 +2086,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var dropdown = this._getTemplate('dropdown');
 	      var placeholder = this.config.placeholder ? this.config.placeholderValue || this.passedElement.getAttribute('placeholder') : false;
 
-	      this.containerOuter = containerOuter;
-	      this.containerInner = containerInner;
-	      this.input = input;
-	      this.choiceList = choiceList;
-	      this.itemList = itemList;
-	      this.dropdown = dropdown;
+	      this.input = new _input2.default(input, this);
+	      this.itemList = new _itemList2.default(itemList, this);
+	      this.choiceList = new _choiceList2.default(choiceList, this);
+	      this.container = new _container2.default(containerOuter, containerInner, this);
+	      this.dropdown = new _dropdown2.default(dropdown, this);
 
 	      // Hide passed input
 	      this.passedElement.classList.add(this.config.classNames.input, this.config.classNames.hiddenState);
+
 	      this.passedElement.tabIndex = '-1';
 	      this.passedElement.setAttribute('style', 'display:none;');
 	      this.passedElement.setAttribute('aria-hidden', 'true');
 	      this.passedElement.setAttribute('data-choice', 'active');
 
 	      // Wrap input in container preserving DOM ordering
-	      (0, _utils.wrap)(this.passedElement, containerInner);
+	      (0, _utils.wrap)(this.passedElement, this.container.inner);
 
 	      // Wrapper inner container with outer container
-	      (0, _utils.wrap)(containerInner, containerOuter);
+	      (0, _utils.wrap)(this.container.inner, this.container.outer);
 
 	      // If placeholder has been enabled and we have a value
 	      if (placeholder) {
@@ -2474,20 +2114,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 
-	      if (!this.config.addItems) this.disable();
+	      if (!this.config.addItems) {
+	        this.disable();
+	      }
 
-	      containerOuter.appendChild(containerInner);
-	      containerOuter.appendChild(dropdown);
-	      containerInner.appendChild(itemList);
+	      this.container.outer.appendChild(this.container.inner);
+	      this.container.outer.appendChild(this.dropdown.element);
+	      this.container.inner.appendChild(this.itemList.element);
 
 	      if (this.passedElement.type !== 'text') {
-	        dropdown.appendChild(choiceList);
+	        this.dropdown.element.appendChild(choiceList);
 	      }
 
 	      if (this.passedElement.type === 'select-multiple' || this.passedElement.type === 'text') {
-	        containerInner.appendChild(input);
+	        this.container.inner.appendChild(input);
 	      } else if (this.canSearch) {
-	        dropdown.insertBefore(input, dropdown.firstChild);
+	        this.dropdown.element.insertBefore(input, this.dropdown.element.firstChild);
 	      }
 
 	      if (this.passedElement.type === 'select-multiple' || this.passedElement.type === 'select-one') {
@@ -2498,7 +2140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        if (passedGroups && passedGroups.length) {
 	          passedGroups.forEach(function (group) {
-	            _this23._addGroup(group, group.id || null);
+	            _this20._addGroup(group, group.id || null);
 	          });
 	        } else {
 	          var passedOptions = Array.from(this.passedElement.options);
@@ -2530,17 +2172,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var isDisabled = choice.disabled ? choice.disabled : false;
 	            var isSelected = choice.selected ? choice.selected : false;
 	            // Pre-select first choice if it's a single select
-	            if (_this23.passedElement.type === 'select-one') {
+	            if (_this20.passedElement.type === 'select-one') {
 	              if (hasSelectedChoice || !hasSelectedChoice && index > 0) {
 	                // If there is a selected choice already or the choice is not
 	                // the first in the array, add each choice normally
-	                _this23._addChoice(isSelected, isDisabled, choice.value, choice.label);
+	                _this20._addChoice(isSelected, isDisabled, choice.value, choice.label);
 	              } else {
 	                // Otherwise pre-select the first choice in the array
-	                _this23._addChoice(true, false, choice.value, choice.label);
+	                _this20._addChoice(true, false, choice.value, choice.label);
 	              }
 	            } else {
-	              _this23._addChoice(isSelected, isDisabled, choice.value, choice.label);
+	              _this20._addChoice(isSelected, isDisabled, choice.value, choice.label);
 	            }
 	          });
 	        }
@@ -2550,9 +2192,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var itemType = (0, _utils.getType)(item);
 	          if (itemType === 'Object') {
 	            if (!item.value) return;
-	            _this23._addItem(item.value, item.label, item.id);
+	            _this20._addItem(item.value, item.label, item.id);
 	          } else if (itemType === 'String') {
-	            _this23._addItem(item);
+	            _this20._addItem(item);
 	          }
 	        });
 	      }
@@ -3413,1620 +3055,138 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _redux = __webpack_require__(4);
-
-	var _index = __webpack_require__(25);
-
-	var _index2 = _interopRequireDefault(_index);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _utils = __webpack_require__(4);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Store = function () {
-	  function Store() {
-	    _classCallCheck(this, Store);
+	var Dropdown = function () {
+	  function Dropdown(element, instance) {
+	    _classCallCheck(this, Dropdown);
 
-	    this.store = (0, _redux.createStore)(_index2.default, window.devToolsExtension ? window.devToolsExtension() : undefined);
+	    this.element = element;
+	    this.instance = instance;
+	    this.position = instance.config.position;
+	    this.classNames = instance.config.classNames;
+	    this.active = false;
+	    this.flipped = false;
 	  }
 
 	  /**
-	   * Get store object (wrapping Redux method)
-	   * @return {Object} State
+	   * Show dropdown to user by adding active state class
+	   * @return {Object} Class instance
 	   */
 
 
-	  _createClass(Store, [{
-	    key: 'getState',
-	    value: function getState() {
-	      return this.store.getState();
-	    }
+	  _createClass(Dropdown, [{
+	    key: 'show',
+	    value: function show() {
+	      var focusInput = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
-	    /**
-	     * Dispatch event to store (wrapped Redux method)
-	     * @param  {Function} action Action function to trigger
-	     * @return
-	     */
+	      var body = document.body;
+	      var html = document.documentElement;
+	      var winHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
 
-	  }, {
-	    key: 'dispatch',
-	    value: function dispatch(action) {
-	      this.store.dispatch(action);
-	    }
+	      this.instance.container.expand();
+	      this.element.classList.add(this.classNames.activeState);
+	      this.active = true;
 
-	    /**
-	     * Subscribe store to function call (wrapped Redux method)
-	     * @param  {Function} onChange Function to trigger when state changes
-	     * @return
-	     */
+	      var dimensions = this.element.getBoundingClientRect();
+	      var dropdownPos = Math.ceil(dimensions.top + window.scrollY + dimensions.height);
 
-	  }, {
-	    key: 'subscribe',
-	    value: function subscribe(onChange) {
-	      this.store.subscribe(onChange);
-	    }
-
-	    /**
-	     * Get items from store
-	     * @return {Array} Item objects
-	     */
-
-	  }, {
-	    key: 'getItems',
-	    value: function getItems() {
-	      var state = this.store.getState();
-	      return state.items;
-	    }
-
-	    /**
-	     * Get active items from store
-	     * @return {Array} Item objects
-	     */
-
-	  }, {
-	    key: 'getItemsFilteredByActive',
-	    value: function getItemsFilteredByActive() {
-	      var items = this.getItems();
-	      var values = items.filter(function (item) {
-	        return item.active === true;
-	      }, []);
-
-	      return values;
-	    }
-
-	    /**
-	     * Get items from store reduced to just their values
-	     * @return {Array} Item objects
-	     */
-
-	  }, {
-	    key: 'getItemsReducedToValues',
-	    value: function getItemsReducedToValues() {
-	      var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.getItems();
-
-	      var values = items.reduce(function (prev, current) {
-	        prev.push(current.value);
-	        return prev;
-	      }, []);
-
-	      return values;
-	    }
-
-	    /**
-	     * Get choices from store
-	     * @return {Array} Option objects
-	     */
-
-	  }, {
-	    key: 'getChoices',
-	    value: function getChoices() {
-	      var state = this.store.getState();
-	      return state.choices;
-	    }
-
-	    /**
-	     * Get active choices from store
-	     * @return {Array} Option objects
-	     */
-
-	  }, {
-	    key: 'getChoicesFilteredByActive',
-	    value: function getChoicesFilteredByActive() {
-	      var choices = this.getChoices();
-	      var values = choices.filter(function (choice) {
-	        return choice.active === true;
-	      }, []);
-
-	      return values;
-	    }
-
-	    /**
-	     * Get selectable choices from store
-	     * @return {Array} Option objects
-	     */
-
-	  }, {
-	    key: 'getChoicesFilteredBySelectable',
-	    value: function getChoicesFilteredBySelectable() {
-	      var choices = this.getChoices();
-	      var values = choices.filter(function (choice) {
-	        return choice.disabled !== true;
-	      }, []);
-
-	      return values;
-	    }
-
-	    /**
-	     * Get single choice by it's ID
-	     * @return {Object} Found choice
-	     */
-
-	  }, {
-	    key: 'getChoiceById',
-	    value: function getChoiceById(id) {
-	      if (id) {
-	        var choices = this.getChoicesFilteredByActive();
-	        var foundChoice = choices.find(function (choice) {
-	          return choice.id === parseInt(id, 10);
-	        });
-	        return foundChoice;
+	      // If flip is enabled and the dropdown bottom position is greater than the window height flip the dropdown.
+	      var shouldFlip = false;
+	      if (this.position === 'auto') {
+	        shouldFlip = dropdownPos >= winHeight;
+	      } else if (this.position === 'top') {
+	        shouldFlip = true;
 	      }
-	      return false;
+
+	      if (shouldFlip) {
+	        this.instance.container.flip();
+	        this.flipped = true;
+	      } else {
+	        this.instance.container.unflip();
+	        this.flipped = false;
+	      }
+
+	      // Optionally focus the input if we have a search input
+	      if (focusInput && this.canSearch && document.activeElement !== this.input) {
+	        this.instance.input.focus();
+	      }
+
+	      (0, _utils.triggerEvent)(this.instance.passedElement, 'showDropdown', {});
+
+	      return this.instance;
 	    }
 
 	    /**
-	     * Get groups from store
-	     * @return {Array} Group objects
+	     * Hide dropdown from user
+	     * @return {Object} Class instance
 	     */
 
 	  }, {
-	    key: 'getGroups',
-	    value: function getGroups() {
-	      var state = this.store.getState();
-	      return state.groups;
+	    key: 'hide',
+	    value: function hide() {
+	      var blurInput = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+	      // A dropdown flips if it does not have space within the page
+	      var isFlipped = this.flipped;
+
+	      this.instance.container.contract();
+	      this.element.classList.remove(this.classNames.activeState);
+	      this.active = false;
+
+	      if (isFlipped) {
+	        this.instance.container.unflip();
+	        this.flipped = false;
+	      }
+
+	      // Optionally blur the input if we have a search input
+	      if (blurInput && this.canSearch && document.activeElement === this.input) {
+	        this.instance.input.blur();
+	      }
+
+	      (0, _utils.triggerEvent)(this.instance.passedElement, 'hideDropdown', {});
+
+	      return this.instance;
 	    }
 
 	    /**
-	     * Get active groups from store
-	     * @return {Array} Group objects
+	     * Determine whether to hide or show dropdown based on its current state
+	     * @return {Object} Class instance
 	     */
 
 	  }, {
-	    key: 'getGroupsFilteredByActive',
-	    value: function getGroupsFilteredByActive() {
-	      var groups = this.getGroups();
-	      var choices = this.getChoices();
+	    key: 'toggle',
+	    value: function toggle() {
+	      if (this.active) {
+	        this.hide();
+	      } else {
+	        this.show(true);
+	      }
 
-	      var values = groups.filter(function (group) {
-	        var isActive = group.active === true && group.disabled === false;
-	        var hasActiveOptions = choices.some(function (choice) {
-	          return choice.active === true && choice.disabled === false;
-	        });
-	        return isActive && hasActiveOptions;
-	      }, []);
-
-	      return values;
+	      return this.instance;
 	    }
 
 	    /**
-	     * Get group by group id
-	     * @param  {Number} id Group ID
-	     * @return {Object}    Group data
+	     * Get highlighted item
+	     * @return {NodeList}
 	     */
 
 	  }, {
-	    key: 'getGroupById',
-	    value: function getGroupById(id) {
-	      var groups = this.getGroups();
-	      var foundGroup = groups.find(function (group) {
-	        return group.id === id;
-	      });
-
-	      return foundGroup;
+	    key: 'getHighlighted',
+	    value: function getHighlighted() {
+	      return this.element.querySelector('.' + this.classNames.highlightedState);
 	    }
 	  }]);
 
-	  return Store;
+	  return Dropdown;
 	}();
 
-	exports.default = Store;
-
-
-		module.exports = Store;
+		exports.default = Dropdown;
 
 /***/ },
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-	exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
-
-	var _createStore = __webpack_require__(5);
-
-	var _createStore2 = _interopRequireDefault(_createStore);
-
-	var _combineReducers = __webpack_require__(20);
-
-	var _combineReducers2 = _interopRequireDefault(_combineReducers);
-
-	var _bindActionCreators = __webpack_require__(22);
-
-	var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
-
-	var _applyMiddleware = __webpack_require__(23);
-
-	var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
-
-	var _compose = __webpack_require__(24);
-
-	var _compose2 = _interopRequireDefault(_compose);
-
-	var _warning = __webpack_require__(21);
-
-	var _warning2 = _interopRequireDefault(_warning);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	/*
-	* This is a dummy function to check if the function name has been altered by minification.
-	* If the function has been minified and NODE_ENV !== 'production', warn the user.
-	*/
-	function isCrushed() {}
-
-	if (false) {
-	  (0, _warning2['default'])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
-	}
-
-	exports.createStore = _createStore2['default'];
-	exports.combineReducers = _combineReducers2['default'];
-	exports.bindActionCreators = _bindActionCreators2['default'];
-	exports.applyMiddleware = _applyMiddleware2['default'];
-	exports.compose = _compose2['default'];
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-	exports.ActionTypes = undefined;
-	exports['default'] = createStore;
-
-	var _isPlainObject = __webpack_require__(6);
-
-	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
-
-	var _symbolObservable = __webpack_require__(16);
-
-	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	/**
-	 * These are private action types reserved by Redux.
-	 * For any unknown actions, you must return the current state.
-	 * If the current state is undefined, you must return the initial state.
-	 * Do not reference these action types directly in your code.
-	 */
-	var ActionTypes = exports.ActionTypes = {
-	  INIT: '@@redux/INIT'
-	};
-
-	/**
-	 * Creates a Redux store that holds the state tree.
-	 * The only way to change the data in the store is to call `dispatch()` on it.
-	 *
-	 * There should only be a single store in your app. To specify how different
-	 * parts of the state tree respond to actions, you may combine several reducers
-	 * into a single reducer function by using `combineReducers`.
-	 *
-	 * @param {Function} reducer A function that returns the next state tree, given
-	 * the current state tree and the action to handle.
-	 *
-	 * @param {any} [preloadedState] The initial state. You may optionally specify it
-	 * to hydrate the state from the server in universal apps, or to restore a
-	 * previously serialized user session.
-	 * If you use `combineReducers` to produce the root reducer function, this must be
-	 * an object with the same shape as `combineReducers` keys.
-	 *
-	 * @param {Function} enhancer The store enhancer. You may optionally specify it
-	 * to enhance the store with third-party capabilities such as middleware,
-	 * time travel, persistence, etc. The only store enhancer that ships with Redux
-	 * is `applyMiddleware()`.
-	 *
-	 * @returns {Store} A Redux store that lets you read the state, dispatch actions
-	 * and subscribe to changes.
-	 */
-	function createStore(reducer, preloadedState, enhancer) {
-	  var _ref2;
-
-	  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
-	    enhancer = preloadedState;
-	    preloadedState = undefined;
-	  }
-
-	  if (typeof enhancer !== 'undefined') {
-	    if (typeof enhancer !== 'function') {
-	      throw new Error('Expected the enhancer to be a function.');
-	    }
-
-	    return enhancer(createStore)(reducer, preloadedState);
-	  }
-
-	  if (typeof reducer !== 'function') {
-	    throw new Error('Expected the reducer to be a function.');
-	  }
-
-	  var currentReducer = reducer;
-	  var currentState = preloadedState;
-	  var currentListeners = [];
-	  var nextListeners = currentListeners;
-	  var isDispatching = false;
-
-	  function ensureCanMutateNextListeners() {
-	    if (nextListeners === currentListeners) {
-	      nextListeners = currentListeners.slice();
-	    }
-	  }
-
-	  /**
-	   * Reads the state tree managed by the store.
-	   *
-	   * @returns {any} The current state tree of your application.
-	   */
-	  function getState() {
-	    return currentState;
-	  }
-
-	  /**
-	   * Adds a change listener. It will be called any time an action is dispatched,
-	   * and some part of the state tree may potentially have changed. You may then
-	   * call `getState()` to read the current state tree inside the callback.
-	   *
-	   * You may call `dispatch()` from a change listener, with the following
-	   * caveats:
-	   *
-	   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
-	   * If you subscribe or unsubscribe while the listeners are being invoked, this
-	   * will not have any effect on the `dispatch()` that is currently in progress.
-	   * However, the next `dispatch()` call, whether nested or not, will use a more
-	   * recent snapshot of the subscription list.
-	   *
-	   * 2. The listener should not expect to see all state changes, as the state
-	   * might have been updated multiple times during a nested `dispatch()` before
-	   * the listener is called. It is, however, guaranteed that all subscribers
-	   * registered before the `dispatch()` started will be called with the latest
-	   * state by the time it exits.
-	   *
-	   * @param {Function} listener A callback to be invoked on every dispatch.
-	   * @returns {Function} A function to remove this change listener.
-	   */
-	  function subscribe(listener) {
-	    if (typeof listener !== 'function') {
-	      throw new Error('Expected listener to be a function.');
-	    }
-
-	    var isSubscribed = true;
-
-	    ensureCanMutateNextListeners();
-	    nextListeners.push(listener);
-
-	    return function unsubscribe() {
-	      if (!isSubscribed) {
-	        return;
-	      }
-
-	      isSubscribed = false;
-
-	      ensureCanMutateNextListeners();
-	      var index = nextListeners.indexOf(listener);
-	      nextListeners.splice(index, 1);
-	    };
-	  }
-
-	  /**
-	   * Dispatches an action. It is the only way to trigger a state change.
-	   *
-	   * The `reducer` function, used to create the store, will be called with the
-	   * current state tree and the given `action`. Its return value will
-	   * be considered the **next** state of the tree, and the change listeners
-	   * will be notified.
-	   *
-	   * The base implementation only supports plain object actions. If you want to
-	   * dispatch a Promise, an Observable, a thunk, or something else, you need to
-	   * wrap your store creating function into the corresponding middleware. For
-	   * example, see the documentation for the `redux-thunk` package. Even the
-	   * middleware will eventually dispatch plain object actions using this method.
-	   *
-	   * @param {Object} action A plain object representing “what changed”. It is
-	   * a good idea to keep actions serializable so you can record and replay user
-	   * sessions, or use the time travelling `redux-devtools`. An action must have
-	   * a `type` property which may not be `undefined`. It is a good idea to use
-	   * string constants for action types.
-	   *
-	   * @returns {Object} For convenience, the same action object you dispatched.
-	   *
-	   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
-	   * return something else (for example, a Promise you can await).
-	   */
-	  function dispatch(action) {
-	    if (!(0, _isPlainObject2['default'])(action)) {
-	      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
-	    }
-
-	    if (typeof action.type === 'undefined') {
-	      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
-	    }
-
-	    if (isDispatching) {
-	      throw new Error('Reducers may not dispatch actions.');
-	    }
-
-	    try {
-	      isDispatching = true;
-	      currentState = currentReducer(currentState, action);
-	    } finally {
-	      isDispatching = false;
-	    }
-
-	    var listeners = currentListeners = nextListeners;
-	    for (var i = 0; i < listeners.length; i++) {
-	      listeners[i]();
-	    }
-
-	    return action;
-	  }
-
-	  /**
-	   * Replaces the reducer currently used by the store to calculate the state.
-	   *
-	   * You might need this if your app implements code splitting and you want to
-	   * load some of the reducers dynamically. You might also need this if you
-	   * implement a hot reloading mechanism for Redux.
-	   *
-	   * @param {Function} nextReducer The reducer for the store to use instead.
-	   * @returns {void}
-	   */
-	  function replaceReducer(nextReducer) {
-	    if (typeof nextReducer !== 'function') {
-	      throw new Error('Expected the nextReducer to be a function.');
-	    }
-
-	    currentReducer = nextReducer;
-	    dispatch({ type: ActionTypes.INIT });
-	  }
-
-	  /**
-	   * Interoperability point for observable/reactive libraries.
-	   * @returns {observable} A minimal observable of state changes.
-	   * For more information, see the observable proposal:
-	   * https://github.com/zenparsing/es-observable
-	   */
-	  function observable() {
-	    var _ref;
-
-	    var outerSubscribe = subscribe;
-	    return _ref = {
-	      /**
-	       * The minimal observable subscription method.
-	       * @param {Object} observer Any object that can be used as an observer.
-	       * The observer object should have a `next` method.
-	       * @returns {subscription} An object with an `unsubscribe` method that can
-	       * be used to unsubscribe the observable from the store, and prevent further
-	       * emission of values from the observable.
-	       */
-	      subscribe: function subscribe(observer) {
-	        if (typeof observer !== 'object') {
-	          throw new TypeError('Expected the observer to be an object.');
-	        }
-
-	        function observeState() {
-	          if (observer.next) {
-	            observer.next(getState());
-	          }
-	        }
-
-	        observeState();
-	        var unsubscribe = outerSubscribe(observeState);
-	        return { unsubscribe: unsubscribe };
-	      }
-	    }, _ref[_symbolObservable2['default']] = function () {
-	      return this;
-	    }, _ref;
-	  }
-
-	  // When a store is created, an "INIT" action is dispatched so that every
-	  // reducer returns their initial state. This effectively populates
-	  // the initial state tree.
-	  dispatch({ type: ActionTypes.INIT });
-
-	  return _ref2 = {
-	    dispatch: dispatch,
-	    subscribe: subscribe,
-	    getState: getState,
-	    replaceReducer: replaceReducer
-	  }, _ref2[_symbolObservable2['default']] = observable, _ref2;
-	}
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var baseGetTag = __webpack_require__(7),
-	    getPrototype = __webpack_require__(13),
-	    isObjectLike = __webpack_require__(15);
-
-	/** `Object#toString` result references. */
-	var objectTag = '[object Object]';
-
-	/** Used for built-in method references. */
-	var funcProto = Function.prototype,
-	    objectProto = Object.prototype;
-
-	/** Used to resolve the decompiled source of functions. */
-	var funcToString = funcProto.toString;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/** Used to infer the `Object` constructor. */
-	var objectCtorString = funcToString.call(Object);
-
-	/**
-	 * Checks if `value` is a plain object, that is, an object created by the
-	 * `Object` constructor or one with a `[[Prototype]]` of `null`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.8.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
-	 * @example
-	 *
-	 * function Foo() {
-	 *   this.a = 1;
-	 * }
-	 *
-	 * _.isPlainObject(new Foo);
-	 * // => false
-	 *
-	 * _.isPlainObject([1, 2, 3]);
-	 * // => false
-	 *
-	 * _.isPlainObject({ 'x': 0, 'y': 0 });
-	 * // => true
-	 *
-	 * _.isPlainObject(Object.create(null));
-	 * // => true
-	 */
-	function isPlainObject(value) {
-	  if (!isObjectLike(value) || baseGetTag(value) != objectTag) {
-	    return false;
-	  }
-	  var proto = getPrototype(value);
-	  if (proto === null) {
-	    return true;
-	  }
-	  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
-	  return typeof Ctor == 'function' && Ctor instanceof Ctor &&
-	    funcToString.call(Ctor) == objectCtorString;
-	}
-
-	module.exports = isPlainObject;
-
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Symbol = __webpack_require__(8),
-	    getRawTag = __webpack_require__(11),
-	    objectToString = __webpack_require__(12);
-
-	/** `Object#toString` result references. */
-	var nullTag = '[object Null]',
-	    undefinedTag = '[object Undefined]';
-
-	/** Built-in value references. */
-	var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
-
-	/**
-	 * The base implementation of `getTag` without fallbacks for buggy environments.
-	 *
-	 * @private
-	 * @param {*} value The value to query.
-	 * @returns {string} Returns the `toStringTag`.
-	 */
-	function baseGetTag(value) {
-	  if (value == null) {
-	    return value === undefined ? undefinedTag : nullTag;
-	  }
-	  return (symToStringTag && symToStringTag in Object(value))
-	    ? getRawTag(value)
-	    : objectToString(value);
-	}
-
-	module.exports = baseGetTag;
-
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var root = __webpack_require__(9);
-
-	/** Built-in value references. */
-	var Symbol = root.Symbol;
-
-	module.exports = Symbol;
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var freeGlobal = __webpack_require__(10);
-
-	/** Detect free variable `self`. */
-	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-	/** Used as a reference to the global object. */
-	var root = freeGlobal || freeSelf || Function('return this')();
-
-	module.exports = root;
-
-
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
-	var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
-
-	module.exports = freeGlobal;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Symbol = __webpack_require__(8);
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * Used to resolve the
-	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var nativeObjectToString = objectProto.toString;
-
-	/** Built-in value references. */
-	var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
-
-	/**
-	 * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
-	 *
-	 * @private
-	 * @param {*} value The value to query.
-	 * @returns {string} Returns the raw `toStringTag`.
-	 */
-	function getRawTag(value) {
-	  var isOwn = hasOwnProperty.call(value, symToStringTag),
-	      tag = value[symToStringTag];
-
-	  try {
-	    value[symToStringTag] = undefined;
-	    var unmasked = true;
-	  } catch (e) {}
-
-	  var result = nativeObjectToString.call(value);
-	  if (unmasked) {
-	    if (isOwn) {
-	      value[symToStringTag] = tag;
-	    } else {
-	      delete value[symToStringTag];
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = getRawTag;
-
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/**
-	 * Used to resolve the
-	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var nativeObjectToString = objectProto.toString;
-
-	/**
-	 * Converts `value` to a string using `Object.prototype.toString`.
-	 *
-	 * @private
-	 * @param {*} value The value to convert.
-	 * @returns {string} Returns the converted string.
-	 */
-	function objectToString(value) {
-	  return nativeObjectToString.call(value);
-	}
-
-	module.exports = objectToString;
-
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var overArg = __webpack_require__(14);
-
-	/** Built-in value references. */
-	var getPrototype = overArg(Object.getPrototypeOf, Object);
-
-	module.exports = getPrototype;
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	/**
-	 * Creates a unary function that invokes `func` with its argument transformed.
-	 *
-	 * @private
-	 * @param {Function} func The function to wrap.
-	 * @param {Function} transform The argument transform.
-	 * @returns {Function} Returns the new function.
-	 */
-	function overArg(func, transform) {
-	  return function(arg) {
-	    return func(transform(arg));
-	  };
-	}
-
-	module.exports = overArg;
-
-
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	/**
-	 * Checks if `value` is object-like. A value is object-like if it's not `null`
-	 * and has a `typeof` result of "object".
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 * @example
-	 *
-	 * _.isObjectLike({});
-	 * // => true
-	 *
-	 * _.isObjectLike([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObjectLike(_.noop);
-	 * // => false
-	 *
-	 * _.isObjectLike(null);
-	 * // => false
-	 */
-	function isObjectLike(value) {
-	  return value != null && typeof value == 'object';
-	}
-
-	module.exports = isObjectLike;
-
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(17);
-
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _ponyfill = __webpack_require__(19);
-
-	var _ponyfill2 = _interopRequireDefault(_ponyfill);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var root; /* global window */
-
-
-	if (typeof self !== 'undefined') {
-	  root = self;
-	} else if (typeof window !== 'undefined') {
-	  root = window;
-	} else if (typeof global !== 'undefined') {
-	  root = global;
-	} else if (true) {
-	  root = module;
-	} else {
-	  root = Function('return this')();
-	}
-
-	var result = (0, _ponyfill2['default'])(root);
-	exports['default'] = result;
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(18)(module)))
-
-/***/ },
-/* 18 */
-/***/ function(module, exports) {
-
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-
-/***/ },
-/* 19 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports['default'] = symbolObservablePonyfill;
-	function symbolObservablePonyfill(root) {
-		var result;
-		var _Symbol = root.Symbol;
-
-		if (typeof _Symbol === 'function') {
-			if (_Symbol.observable) {
-				result = _Symbol.observable;
-			} else {
-				result = _Symbol('observable');
-				_Symbol.observable = result;
-			}
-		} else {
-			result = '@@observable';
-		}
-
-		return result;
-	};
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-	exports['default'] = combineReducers;
-
-	var _createStore = __webpack_require__(5);
-
-	var _isPlainObject = __webpack_require__(6);
-
-	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
-
-	var _warning = __webpack_require__(21);
-
-	var _warning2 = _interopRequireDefault(_warning);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function getUndefinedStateErrorMessage(key, action) {
-	  var actionType = action && action.type;
-	  var actionName = actionType && '"' + actionType.toString() + '"' || 'an action';
-
-	  return 'Given action ' + actionName + ', reducer "' + key + '" returned undefined. ' + 'To ignore an action, you must explicitly return the previous state.';
-	}
-
-	function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
-	  var reducerKeys = Object.keys(reducers);
-	  var argumentName = action && action.type === _createStore.ActionTypes.INIT ? 'preloadedState argument passed to createStore' : 'previous state received by the reducer';
-
-	  if (reducerKeys.length === 0) {
-	    return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
-	  }
-
-	  if (!(0, _isPlainObject2['default'])(inputState)) {
-	    return 'The ' + argumentName + ' has unexpected type of "' + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + '". Expected argument to be an object with the following ' + ('keys: "' + reducerKeys.join('", "') + '"');
-	  }
-
-	  var unexpectedKeys = Object.keys(inputState).filter(function (key) {
-	    return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
-	  });
-
-	  unexpectedKeys.forEach(function (key) {
-	    unexpectedKeyCache[key] = true;
-	  });
-
-	  if (unexpectedKeys.length > 0) {
-	    return 'Unexpected ' + (unexpectedKeys.length > 1 ? 'keys' : 'key') + ' ' + ('"' + unexpectedKeys.join('", "') + '" found in ' + argumentName + '. ') + 'Expected to find one of the known reducer keys instead: ' + ('"' + reducerKeys.join('", "') + '". Unexpected keys will be ignored.');
-	  }
-	}
-
-	function assertReducerSanity(reducers) {
-	  Object.keys(reducers).forEach(function (key) {
-	    var reducer = reducers[key];
-	    var initialState = reducer(undefined, { type: _createStore.ActionTypes.INIT });
-
-	    if (typeof initialState === 'undefined') {
-	      throw new Error('Reducer "' + key + '" returned undefined during initialization. ' + 'If the state passed to the reducer is undefined, you must ' + 'explicitly return the initial state. The initial state may ' + 'not be undefined.');
-	    }
-
-	    var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.');
-	    if (typeof reducer(undefined, { type: type }) === 'undefined') {
-	      throw new Error('Reducer "' + key + '" returned undefined when probed with a random type. ' + ('Don\'t try to handle ' + _createStore.ActionTypes.INIT + ' or other actions in "redux/*" ') + 'namespace. They are considered private. Instead, you must return the ' + 'current state for any unknown actions, unless it is undefined, ' + 'in which case you must return the initial state, regardless of the ' + 'action type. The initial state may not be undefined.');
-	    }
-	  });
-	}
-
-	/**
-	 * Turns an object whose values are different reducer functions, into a single
-	 * reducer function. It will call every child reducer, and gather their results
-	 * into a single state object, whose keys correspond to the keys of the passed
-	 * reducer functions.
-	 *
-	 * @param {Object} reducers An object whose values correspond to different
-	 * reducer functions that need to be combined into one. One handy way to obtain
-	 * it is to use ES6 `import * as reducers` syntax. The reducers may never return
-	 * undefined for any action. Instead, they should return their initial state
-	 * if the state passed to them was undefined, and the current state for any
-	 * unrecognized action.
-	 *
-	 * @returns {Function} A reducer function that invokes every reducer inside the
-	 * passed object, and builds a state object with the same shape.
-	 */
-	function combineReducers(reducers) {
-	  var reducerKeys = Object.keys(reducers);
-	  var finalReducers = {};
-	  for (var i = 0; i < reducerKeys.length; i++) {
-	    var key = reducerKeys[i];
-
-	    if (false) {
-	      if (typeof reducers[key] === 'undefined') {
-	        (0, _warning2['default'])('No reducer provided for key "' + key + '"');
-	      }
-	    }
-
-	    if (typeof reducers[key] === 'function') {
-	      finalReducers[key] = reducers[key];
-	    }
-	  }
-	  var finalReducerKeys = Object.keys(finalReducers);
-
-	  if (false) {
-	    var unexpectedKeyCache = {};
-	  }
-
-	  var sanityError;
-	  try {
-	    assertReducerSanity(finalReducers);
-	  } catch (e) {
-	    sanityError = e;
-	  }
-
-	  return function combination() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    var action = arguments[1];
-
-	    if (sanityError) {
-	      throw sanityError;
-	    }
-
-	    if (false) {
-	      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
-	      if (warningMessage) {
-	        (0, _warning2['default'])(warningMessage);
-	      }
-	    }
-
-	    var hasChanged = false;
-	    var nextState = {};
-	    for (var i = 0; i < finalReducerKeys.length; i++) {
-	      var key = finalReducerKeys[i];
-	      var reducer = finalReducers[key];
-	      var previousStateForKey = state[key];
-	      var nextStateForKey = reducer(previousStateForKey, action);
-	      if (typeof nextStateForKey === 'undefined') {
-	        var errorMessage = getUndefinedStateErrorMessage(key, action);
-	        throw new Error(errorMessage);
-	      }
-	      nextState[key] = nextStateForKey;
-	      hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
-	    }
-	    return hasChanged ? nextState : state;
-	  };
-	}
-
-/***/ },
-/* 21 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	exports.__esModule = true;
-	exports['default'] = warning;
-	/**
-	 * Prints a warning in the console if it exists.
-	 *
-	 * @param {String} message The warning message.
-	 * @returns {void}
-	 */
-	function warning(message) {
-	  /* eslint-disable no-console */
-	  if (typeof console !== 'undefined' && typeof console.error === 'function') {
-	    console.error(message);
-	  }
-	  /* eslint-enable no-console */
-	  try {
-	    // This error was thrown as a convenience so that if you enable
-	    // "break on all exceptions" in your console,
-	    // it would pause the execution at this line.
-	    throw new Error(message);
-	    /* eslint-disable no-empty */
-	  } catch (e) {}
-	  /* eslint-enable no-empty */
-	}
-
-/***/ },
-/* 22 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	exports.__esModule = true;
-	exports['default'] = bindActionCreators;
-	function bindActionCreator(actionCreator, dispatch) {
-	  return function () {
-	    return dispatch(actionCreator.apply(undefined, arguments));
-	  };
-	}
-
-	/**
-	 * Turns an object whose values are action creators, into an object with the
-	 * same keys, but with every function wrapped into a `dispatch` call so they
-	 * may be invoked directly. This is just a convenience method, as you can call
-	 * `store.dispatch(MyActionCreators.doSomething())` yourself just fine.
-	 *
-	 * For convenience, you can also pass a single function as the first argument,
-	 * and get a function in return.
-	 *
-	 * @param {Function|Object} actionCreators An object whose values are action
-	 * creator functions. One handy way to obtain it is to use ES6 `import * as`
-	 * syntax. You may also pass a single function.
-	 *
-	 * @param {Function} dispatch The `dispatch` function available on your Redux
-	 * store.
-	 *
-	 * @returns {Function|Object} The object mimicking the original object, but with
-	 * every action creator wrapped into the `dispatch` call. If you passed a
-	 * function as `actionCreators`, the return value will also be a single
-	 * function.
-	 */
-	function bindActionCreators(actionCreators, dispatch) {
-	  if (typeof actionCreators === 'function') {
-	    return bindActionCreator(actionCreators, dispatch);
-	  }
-
-	  if (typeof actionCreators !== 'object' || actionCreators === null) {
-	    throw new Error('bindActionCreators expected an object or a function, instead received ' + (actionCreators === null ? 'null' : typeof actionCreators) + '. ' + 'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?');
-	  }
-
-	  var keys = Object.keys(actionCreators);
-	  var boundActionCreators = {};
-	  for (var i = 0; i < keys.length; i++) {
-	    var key = keys[i];
-	    var actionCreator = actionCreators[key];
-	    if (typeof actionCreator === 'function') {
-	      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
-	    }
-	  }
-	  return boundActionCreators;
-	}
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	exports['default'] = applyMiddleware;
-
-	var _compose = __webpack_require__(24);
-
-	var _compose2 = _interopRequireDefault(_compose);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	/**
-	 * Creates a store enhancer that applies middleware to the dispatch method
-	 * of the Redux store. This is handy for a variety of tasks, such as expressing
-	 * asynchronous actions in a concise manner, or logging every action payload.
-	 *
-	 * See `redux-thunk` package as an example of the Redux middleware.
-	 *
-	 * Because middleware is potentially asynchronous, this should be the first
-	 * store enhancer in the composition chain.
-	 *
-	 * Note that each middleware will be given the `dispatch` and `getState` functions
-	 * as named arguments.
-	 *
-	 * @param {...Function} middlewares The middleware chain to be applied.
-	 * @returns {Function} A store enhancer applying the middleware.
-	 */
-	function applyMiddleware() {
-	  for (var _len = arguments.length, middlewares = Array(_len), _key = 0; _key < _len; _key++) {
-	    middlewares[_key] = arguments[_key];
-	  }
-
-	  return function (createStore) {
-	    return function (reducer, preloadedState, enhancer) {
-	      var store = createStore(reducer, preloadedState, enhancer);
-	      var _dispatch = store.dispatch;
-	      var chain = [];
-
-	      var middlewareAPI = {
-	        getState: store.getState,
-	        dispatch: function dispatch(action) {
-	          return _dispatch(action);
-	        }
-	      };
-	      chain = middlewares.map(function (middleware) {
-	        return middleware(middlewareAPI);
-	      });
-	      _dispatch = _compose2['default'].apply(undefined, chain)(store.dispatch);
-
-	      return _extends({}, store, {
-	        dispatch: _dispatch
-	      });
-	    };
-	  };
-	}
-
-/***/ },
-/* 24 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	exports.__esModule = true;
-	exports["default"] = compose;
-	/**
-	 * Composes single-argument functions from right to left. The rightmost
-	 * function can take multiple arguments as it provides the signature for
-	 * the resulting composite function.
-	 *
-	 * @param {...Function} funcs The functions to compose.
-	 * @returns {Function} A function obtained by composing the argument functions
-	 * from right to left. For example, compose(f, g, h) is identical to doing
-	 * (...args) => f(g(h(...args))).
-	 */
-
-	function compose() {
-	  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
-	    funcs[_key] = arguments[_key];
-	  }
-
-	  if (funcs.length === 0) {
-	    return function (arg) {
-	      return arg;
-	    };
-	  }
-
-	  if (funcs.length === 1) {
-	    return funcs[0];
-	  }
-
-	  var last = funcs[funcs.length - 1];
-	  var rest = funcs.slice(0, -1);
-	  return function () {
-	    return rest.reduceRight(function (composed, f) {
-	      return f(composed);
-	    }, last.apply(undefined, arguments));
-	  };
-	}
-
-/***/ },
-/* 25 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _redux = __webpack_require__(4);
-
-	var _items = __webpack_require__(26);
-
-	var _items2 = _interopRequireDefault(_items);
-
-	var _groups = __webpack_require__(27);
-
-	var _groups2 = _interopRequireDefault(_groups);
-
-	var _choices = __webpack_require__(28);
-
-	var _choices2 = _interopRequireDefault(_choices);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var appReducer = (0, _redux.combineReducers)({
-	  items: _items2.default,
-	  groups: _groups2.default,
-	  choices: _choices2.default
-	});
-
-	var rootReducer = function rootReducer(passedState, action) {
-	  var state = passedState;
-	  // If we are clearing all items, groups and options we reassign
-	  // state and then pass that state to our proper reducer. This isn't
-	  // mutating our actual state
-	  // See: http://stackoverflow.com/a/35641992
-	  if (action.type === 'CLEAR_ALL') {
-	    state = undefined;
-	  }
-
-	  return appReducer(state, action);
-	};
-
-	exports.default = rootReducer;
-
-/***/ },
-/* 26 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	var items = function items() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-	  var action = arguments[1];
-
-	  switch (action.type) {
-	    case 'ADD_ITEM':
-	      {
-	        // Add object to items array
-	        var newState = [].concat(_toConsumableArray(state), [{
-	          id: action.id,
-	          choiceId: action.choiceId,
-	          groupId: action.groupId,
-	          value: action.value,
-	          label: action.label,
-	          active: true,
-	          highlighted: false
-	        }]);
-
-	        return newState.map(function (item) {
-	          if (item.highlighted) {
-	            item.highlighted = false;
-	          }
-	          return item;
-	        });
-	      }
-
-	    case 'REMOVE_ITEM':
-	      {
-	        // Set item to inactive
-	        return state.map(function (item) {
-	          if (item.id === action.id) {
-	            item.active = false;
-	          }
-	          return item;
-	        });
-	      }
-
-	    case 'HIGHLIGHT_ITEM':
-	      {
-	        return state.map(function (item) {
-	          if (item.id === action.id) {
-	            item.highlighted = action.highlighted;
-	          }
-	          return item;
-	        });
-	      }
-
-	    default:
-	      {
-	        return state;
-	      }
-	  }
-	};
-
-	exports.default = items;
-
-/***/ },
-/* 27 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	var groups = function groups() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-	  var action = arguments[1];
-
-	  switch (action.type) {
-	    case 'ADD_GROUP':
-	      {
-	        return [].concat(_toConsumableArray(state), [{
-	          id: action.id,
-	          value: action.value,
-	          active: action.active,
-	          disabled: action.disabled
-	        }]);
-	      }
-
-	    case 'CLEAR_CHOICES':
-	      {
-	        return state.groups = [];
-	      }
-
-	    default:
-	      {
-	        return state;
-	      }
-	  }
-	};
-
-	exports.default = groups;
-
-/***/ },
-/* 28 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	var choices = function choices() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-	  var action = arguments[1];
-
-	  switch (action.type) {
-	    case 'ADD_CHOICE':
-	      {
-	        /*
-	            A disabled choice appears in the choice dropdown but cannot be selected
-	            A selected choice has been added to the passed input's value (added as an item)
-	            An active choice appears within the choice dropdown
-	         */
-	        return [].concat(_toConsumableArray(state), [{
-	          id: action.id,
-	          groupId: action.groupId,
-	          value: action.value,
-	          label: action.label,
-	          disabled: action.disabled,
-	          selected: false,
-	          active: true,
-	          score: 9999
-	        }]);
-	      }
-
-	    case 'ADD_ITEM':
-	      {
-	        var newState = state;
-
-	        // If all choices need to be activated
-	        if (action.activateOptions) {
-	          newState = state.map(function (choice) {
-	            choice.active = action.active;
-	            return choice;
-	          });
-	        }
-	        // When an item is added and it has an associated choice,
-	        // we want to disable it so it can't be chosen again
-	        if (action.choiceId > -1) {
-	          newState = state.map(function (choice) {
-	            if (choice.id === parseInt(action.choiceId, 10)) {
-	              choice.selected = true;
-	            }
-	            return choice;
-	          });
-	        }
-
-	        return newState;
-	      }
-
-	    case 'REMOVE_ITEM':
-	      {
-	        // When an item is removed and it has an associated choice,
-	        // we want to re-enable it so it can be chosen again
-	        if (action.choiceId > -1) {
-	          return state.map(function (choice) {
-	            if (choice.id === parseInt(action.choiceId, 10)) {
-	              choice.selected = false;
-	            }
-	            return choice;
-	          });
-	        }
-
-	        return state;
-	      }
-
-	    case 'FILTER_CHOICES':
-	      {
-	        var filteredResults = action.results;
-	        var filteredState = state.map(function (choice) {
-	          // Set active state based on whether choice is
-	          // within filtered results
-
-	          choice.active = filteredResults.some(function (result) {
-	            if (result.item.id === choice.id) {
-	              choice.score = result.score;
-	              return true;
-	            }
-	            return false;
-	          });
-
-	          return choice;
-	        });
-
-	        return filteredState;
-	      }
-
-	    case 'ACTIVATE_CHOICES':
-	      {
-	        return state.map(function (choice) {
-	          choice.active = action.active;
-	          return choice;
-	        });
-	      }
-
-	    case 'CLEAR_CHOICES':
-	      {
-	        return state.choices = [];
-	      }
-
-	    default:
-	      {
-	        return state;
-	      }
-	  }
-	};
-
-	exports.default = choices;
-
-/***/ },
-/* 29 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var addItem = exports.addItem = function addItem(value, label, id, choiceId, groupId) {
-	  return {
-	    type: 'ADD_ITEM',
-	    value: value,
-	    label: label,
-	    id: id,
-	    choiceId: choiceId,
-	    groupId: groupId
-	  };
-	};
-
-	var removeItem = exports.removeItem = function removeItem(id, choiceId) {
-	  return {
-	    type: 'REMOVE_ITEM',
-	    id: id,
-	    choiceId: choiceId
-	  };
-	};
-
-	var highlightItem = exports.highlightItem = function highlightItem(id, highlighted) {
-	  return {
-	    type: 'HIGHLIGHT_ITEM',
-	    id: id,
-	    highlighted: highlighted
-	  };
-	};
-
-	var addChoice = exports.addChoice = function addChoice(value, label, id, groupId, disabled) {
-	  return {
-	    type: 'ADD_CHOICE',
-	    value: value,
-	    label: label,
-	    id: id,
-	    groupId: groupId,
-	    disabled: disabled
-	  };
-	};
-
-	var filterChoices = exports.filterChoices = function filterChoices(results) {
-	  return {
-	    type: 'FILTER_CHOICES',
-	    results: results
-	  };
-	};
-
-	var activateChoices = exports.activateChoices = function activateChoices() {
-	  var active = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-
-	  return {
-	    type: 'ACTIVATE_CHOICES',
-	    active: active
-	  };
-	};
-
-	var clearChoices = exports.clearChoices = function clearChoices() {
-	  return {
-	    type: 'CLEAR_CHOICES'
-	  };
-	};
-
-	var addGroup = exports.addGroup = function addGroup(value, id, active, disabled) {
-	  return {
-	    type: 'ADD_GROUP',
-	    value: value,
-	    id: id,
-	    active: active,
-	    disabled: disabled
-	  };
-	};
-
-	var clearAll = exports.clearAll = function clearAll() {
-	  return {
-	    type: 'CLEAR_ALL'
-	  };
-		};
-
-/***/ },
-/* 30 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5553,7 +3713,2242 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Container = function () {
+	  function Container(outerElement, innerElement, instance) {
+	    _classCallCheck(this, Container);
+
+	    this.outer = outerElement;
+	    this.inner = innerElement;
+	    this.instance = instance;
+	    this.classNames = instance.config.classNames;
+	    this.disabled = false;
+	    this.flipped = false;
+	    this.focussed = false;
+	    this.expanded = false;
+	    this.loading = false;
+	  }
+
+	  /**
+	   * Set element focus state
+	   * @return
+	   */
+
+
+	  _createClass(Container, [{
+	    key: 'focus',
+	    value: function focus() {
+	      this.focussed = true;
+	      this.outer.classList.add(this.classNames.focusState);
+	    }
+
+	    /**
+	     * Remove element focus state
+	     * @return
+	     */
+
+	  }, {
+	    key: 'blur',
+	    value: function blur() {
+	      this.focussed = false;
+	      this.outer.classList.remove(this.classNames.focusState);
+	    }
+
+	    /**
+	     * Set element flip state
+	     * @return
+	     */
+
+	  }, {
+	    key: 'flip',
+	    value: function flip() {
+	      this.flipped = true;
+	      this.outer.classList.add(this.classNames.flippedState);
+	    }
+
+	    /**
+	     * Remove element flip state
+	     * @return
+	     */
+
+	  }, {
+	    key: 'unflip',
+	    value: function unflip() {
+	      this.flipped = false;
+	      this.outer.classList.remove(this.classNames.flippedState);
+	    }
+
+	    /**
+	     * Set element expand state
+	     * @return
+	     */
+
+	  }, {
+	    key: 'expand',
+	    value: function expand() {
+	      this.expanded = true;
+	      this.outer.classList.add(this.classNames.openState);
+	      this.outer.setAttribute('aria-expanded', 'true');
+	    }
+
+	    /**
+	     * Remove element expand state
+	     * @return
+	     */
+
+	  }, {
+	    key: 'contract',
+	    value: function contract() {
+	      this.expanded = false;
+	      this.outer.classList.remove(this.classNames.openState);
+	      this.outer.setAttribute('aria-expanded', 'false');
+	    }
+
+	    /**
+	     * Enable element
+	     * @return
+	     */
+
+	  }, {
+	    key: 'enable',
+	    value: function enable() {
+	      this.disabled = false;
+	      this.outer.classList.remove(this.classNames.disabledState);
+	      this.outer.removeAttribute('aria-disabled');
+	    }
+
+	    /**
+	     * Disable element
+	     * @return
+	     */
+
+	  }, {
+	    key: 'disable',
+	    value: function disable() {
+	      this.disabled = true;
+	      this.outer.classList.add(this.classNames.disabledState);
+	      this.outer.setAttribute('aria-disabled', 'true');
+	    }
+
+	    /**
+	     * Set loading state
+	     * @return
+	     */
+
+	  }, {
+	    key: 'startLoader',
+	    value: function startLoader() {
+	      this.loading = true;
+	      this.outer.classList.add(this.classNames.loadingState);
+	      this.outer.setAttribute('aria-busy', 'true');
+	    }
+
+	    /**
+	     * Remove loading state
+	     * @return
+	     */
+
+	  }, {
+	    key: 'stopLoader',
+	    value: function stopLoader() {
+	      this.loading = false;
+	      this.outer.classList.remove(this.classNames.loadingState);
+	      this.outer.removeAttribute('aria-busy');
+	    }
+	  }]);
+
+	  return Container;
+	}();
+
+		exports.default = Container;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var ChoiceList = function () {
+	  function ChoiceList(element, instance) {
+	    _classCallCheck(this, ChoiceList);
+
+	    this.element = element;
+	    this.instance = instance;
+	    this.classNames = instance.config.classNames;
+	  }
+
+	  /**
+	   * Reset element scroll position
+	   * @return
+	   */
+
+
+	  _createClass(ChoiceList, [{
+	    key: 'resetScrollPosition',
+	    value: function resetScrollPosition() {
+	      this.element.scrollTop = 0;
+	    }
+
+	    /**
+	     * Clear element inner HTML
+	     * @return
+	     */
+
+	  }, {
+	    key: 'clear',
+	    value: function clear() {
+	      this.element.innerHTML = '';
+	    }
+
+	    /**
+	     * Scroll to an option element
+	     * @param  {HTMLElement} option  Option to scroll to
+	     * @param  {Number} direction  Whether option is above or below
+	     * @return
+	     */
+
+	  }, {
+	    key: 'scrollToChoice',
+	    value: function scrollToChoice(choice, direction) {
+	      var _this = this;
+
+	      if (!choice) {
+	        return;
+	      }
+
+	      var dropdownHeight = this.element.offsetHeight;
+	      var choiceHeight = choice.offsetHeight;
+	      // Distance from bottom of element to top of parent
+	      var choicePos = choice.offsetTop + choiceHeight;
+	      // Scroll position of dropdown
+	      var containerScrollPos = this.element.scrollTop + dropdownHeight;
+	      // Difference between the choice and scroll position
+	      var endPoint = direction > 0 ? this.element.scrollTop + choicePos - containerScrollPos : choice.offsetTop;
+
+	      var animateScroll = function animateScroll() {
+	        var strength = 4;
+	        var choiceListScrollTop = _this.element.scrollTop;
+	        var continueAnimation = false;
+	        var easing = void 0;
+	        var distance = void 0;
+
+	        if (direction > 0) {
+	          easing = (endPoint - choiceListScrollTop) / strength;
+	          distance = easing > 1 ? easing : 1;
+
+	          _this.element.scrollTop = choiceListScrollTop + distance;
+	          if (choiceListScrollTop < endPoint) {
+	            continueAnimation = true;
+	          }
+	        } else {
+	          easing = (choiceListScrollTop - endPoint) / strength;
+	          distance = easing > 1 ? easing : 1;
+
+	          _this.element.scrollTop = choiceListScrollTop - distance;
+	          if (choiceListScrollTop > endPoint) {
+	            continueAnimation = true;
+	          }
+	        }
+
+	        if (continueAnimation) {
+	          requestAnimationFrame(function (time) {
+	            animateScroll(time, endPoint, direction);
+	          });
+	        }
+	      };
+
+	      requestAnimationFrame(function (time) {
+	        animateScroll(time, endPoint, direction);
+	      });
+	    }
+
+	    /**
+	     * Highlight choice
+	     * @param  {HTMLElement} el Element to highlight
+	     * @return
+	     */
+
+	  }, {
+	    key: 'highlightChoice',
+	    value: function highlightChoice(el) {
+	      var _this2 = this;
+
+	      // Highlight first element in dropdown
+	      var choices = Array.from(this.instance.dropdown.element.querySelectorAll('[data-choice-selectable]'));
+
+	      if (choices && choices.length) {
+	        var highlightedChoices = Array.from(this.instance.dropdown.element.querySelectorAll('.' + this.classNames.highlightedState));
+
+	        // Remove any highlighted choices
+	        highlightedChoices.forEach(function (choice) {
+	          choice.classList.remove(_this2.classNames.highlightedState);
+	          choice.setAttribute('aria-selected', 'false');
+	        });
+
+	        if (el) {
+	          // Highlight given option
+	          el.classList.add(this.classNames.highlightedState);
+	          this.instance.highlightPosition = choices.indexOf(el);
+	        } else {
+	          // Highlight choice based on last known highlight location
+	          var choice = void 0;
+
+	          if (choices.length > this.instance.highlightPosition) {
+	            // If we have an option to highlight
+	            choice = choices[this.instance.highlightPosition];
+	          } else {
+	            // Otherwise highlight the option before
+	            choice = choices[choices.length - 1];
+	          }
+
+	          if (!choice) {
+	            choice = choices[0];
+	          }
+	          choice.classList.add(this.classNames.highlightedState);
+	          choice.setAttribute('aria-selected', 'true');
+	        }
+	      }
+	    }
+
+	    /**
+	     * Process click of a choice
+	     * @param {Array}   activeItems The currently active items
+	     * @param {Element} element     Choice being interacted with
+	     * @return
+	     */
+
+	  }, {
+	    key: 'handleChoiceAction',
+	    value: function handleChoiceAction(activeItems, element) {
+	      if (!activeItems || !element) {
+	        return;
+	      }
+
+	      // If we are clicking on an option
+	      var id = element.getAttribute('data-id');
+	      var choice = this.instance.store.getChoiceById(id);
+	      var hasActiveDropdown = this.instance.dropdown.active;
+
+	      if (choice && !choice.selected && !choice.disabled) {
+	        var canAddItem = this.instance._canAddItem(activeItems, choice.value);
+
+	        if (canAddItem.response) {
+	          this.instance._addItem(choice.value, choice.label, choice.id, choice.groupId);
+	          this.instance._triggerChange(choice.value);
+	        }
+	      }
+
+	      this.instance.input.clearInput(this.instance.passedElement);
+
+	      // We want to close the dropdown if we are dealing with a single select box
+	      if (hasActiveDropdown && this.instance.passedElement.type === 'select-one') {
+	        this.instance.dropdown.hide();
+	        this.instance.container.outer.focus();
+	      }
+	    }
+	  }]);
+
+	  return ChoiceList;
+	}();
+
+		exports.default = ChoiceList;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var ItemList = function () {
+	  function ItemList(element, instance) {
+	    _classCallCheck(this, ItemList);
+
+	    this.element = element;
+	    this.instance = instance;
+	    this.instance.config = instance.config;
+	    this.classNames = instance.config.classNames;
+	  }
+
+	  /**
+	   * Clear element inner HTML
+	   * @return
+	   */
+
+
+	  _createClass(ItemList, [{
+	    key: 'clear',
+	    value: function clear() {
+	      this.element.innerHTML = '';
+	    }
+
+	    /**
+	     * Process click of an item
+	     * @param {Array}   activeItems The currently active items
+	     * @param {Element} element     Item being interacted with
+	     * @param {Boolean} hasShiftKey Whether the user has the shift key active
+	     * @return
+	     */
+
+	  }, {
+	    key: 'handleItemAction',
+	    value: function handleItemAction(activeItems, element) {
+	      var _this = this;
+
+	      var hasShiftKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+	      if (!activeItems || !element) {
+	        return;
+	      }
+
+	      // If we are clicking on an item
+	      if (this.instance.config.removeItems && this.instance.passedElement.type !== 'select-one') {
+	        var passedId = element.getAttribute('data-id');
+
+	        // We only want to select one item with a click
+	        // so we deselect any items that aren't the target
+	        // unless shift is being pressed
+	        activeItems.forEach(function (item) {
+	          if (item.id === parseInt(passedId, 10) && !item.highlighted) {
+	            _this.instance.highlightItem(item);
+	          } else if (!hasShiftKey) {
+	            if (item.highlighted) {
+	              _this.instance.unhighlightItem(item);
+	            }
+	          }
+	        });
+
+	        // Focus input as without focus, a user cannot do anything with a
+	        // highlighted item
+	        if (document.activeElement !== this.input) {
+	          this.instance.input.focus();
+	        }
+	      }
+	    }
+
+	    /**
+	     * Process enter/click of an item button
+	     * @param {Array}   activeItems The currently active items
+	     * @param {Element} element     Button being interacted with
+	     * @return
+	     */
+
+	  }, {
+	    key: 'handleButtonAction',
+	    value: function handleButtonAction(activeItems, element) {
+	      if (!activeItems || !element) {
+	        return;
+	      }
+
+	      // If we are clicking on a button
+	      if (this.instance.config.removeItems && this.instance.config.removeItemButton) {
+	        var itemId = element.parentNode.getAttribute('data-id');
+	        var itemToRemove = activeItems.find(function (item) {
+	          return item.id === parseInt(itemId, 10);
+	        });
+
+	        // Remove item associated with button
+	        this.instance._removeItem(itemToRemove);
+	        this.instance._triggerChange(itemToRemove.value);
+
+	        if (this.instance.passedElement.type === 'select-one') {
+	          var placeholder = this.instance.config.placeholder ? this.instance.config.placeholderValue || this.instance.passedElement.getAttribute('placeholder') : false;
+	          if (placeholder) {
+	            var placeholderItem = this._getTemplate('placeholder', placeholder);
+	            this.element.appendChild(placeholderItem);
+	          }
+	        }
+	      }
+	    }
+	  }]);
+
+	  return ItemList;
+	}();
+
+		exports.default = ItemList;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _utils = __webpack_require__(4);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Input = function () {
+	  function Input(element, instance) {
+	    _classCallCheck(this, Input);
+
+	    this.element = element;
+	    this.instance = instance;
+	    this.classNames = instance.config.classNames;
+	  }
+
+	  /**
+	   * Clear element value
+	   * @return
+	   */
+
+
+	  _createClass(Input, [{
+	    key: 'clearValue',
+	    value: function clearValue() {
+	      if (this.element.value) {
+	        this.setValue('');
+	      }
+	    }
+
+	    /**
+	     * Set element value
+	     * @param {String} value Value to set
+	     * @return
+	     */
+
+	  }, {
+	    key: 'setValue',
+	    value: function setValue(value) {
+	      this.element.value = value;
+	    }
+
+	    /**
+	     * Focus element
+	     * @return
+	     */
+
+	  }, {
+	    key: 'focus',
+	    value: function focus() {
+	      this.element.focus();
+	    }
+
+	    /**
+	     * Remove element disabled attribute
+	     * @return
+	     */
+
+	  }, {
+	    key: 'enable',
+	    value: function enable() {
+	      this.element.removeAttribute('disabled');
+	    }
+
+	    /**
+	     * Set element disabled attribute
+	     * @return
+	     */
+
+	  }, {
+	    key: 'disable',
+	    value: function disable() {
+	      this.element.setAttribute('disabled', '');
+	    }
+
+	    /**
+	     * Set the correct input width based on placeholder
+	     * value or input value
+	     * @return
+	     */
+
+	  }, {
+	    key: 'setInputWidth',
+	    value: function setInputWidth() {
+	      if (this.instance.config.placeholder && (this.instance.config.placeholderValue || this.instance.passedElement.getAttribute('placeholder'))) {
+	        // If there is a placeholder, we only want to set the width of the input when it is a greater
+	        // length than 75% of the placeholder. This stops the input jumping around.
+	        var placeholder = this.instance.config.placeholder ? this.instance.config.placeholderValue || this.instance.passedElement.getAttribute('placeholder') : false;
+	        if (this.element.value && this.element.value.length >= placeholder.length / 1.25) {
+	          this.element.style.width = (0, _utils.getWidthOfInput)(this.element);
+	        }
+	      } else {
+	        // If there is no placeholder, resize input to contents
+	        this.element.style.width = (0, _utils.getWidthOfInput)(this.element);
+	      }
+	    }
+
+	    /**
+	     * Set value of input to blank
+	     * @return {Object} Class instance
+	     */
+
+	  }, {
+	    key: 'clearInput',
+	    value: function clearInput() {
+	      this.clearValue();
+
+	      if (this.instance.passedElement.type !== 'select-one') {
+	        this.setInputWidth();
+	      }
+
+	      return this.instance;
+	    }
+	  }]);
+
+	  return Input;
+	}();
+
+		exports.default = Input;
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _redux = __webpack_require__(10);
+
+	var _index = __webpack_require__(31);
+
+	var _index2 = _interopRequireDefault(_index);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Store = function () {
+	  function Store() {
+	    _classCallCheck(this, Store);
+
+	    this.store = (0, _redux.createStore)(_index2.default, window.devToolsExtension ? window.devToolsExtension() : undefined);
+	  }
+
+	  /**
+	   * Get store object (wrapping Redux method)
+	   * @return {Object} State
+	   */
+
+
+	  _createClass(Store, [{
+	    key: 'getState',
+	    value: function getState() {
+	      return this.store.getState();
+	    }
+
+	    /**
+	     * Dispatch event to store (wrapped Redux method)
+	     * @param  {Function} action Action function to trigger
+	     * @return
+	     */
+
+	  }, {
+	    key: 'dispatch',
+	    value: function dispatch(action) {
+	      this.store.dispatch(action);
+	    }
+
+	    /**
+	     * Subscribe store to function call (wrapped Redux method)
+	     * @param  {Function} onChange Function to trigger when state changes
+	     * @return
+	     */
+
+	  }, {
+	    key: 'subscribe',
+	    value: function subscribe(onChange) {
+	      this.store.subscribe(onChange);
+	    }
+
+	    /**
+	     * Get items from store
+	     * @return {Array} Item objects
+	     */
+
+	  }, {
+	    key: 'getItems',
+	    value: function getItems() {
+	      var state = this.store.getState();
+	      return state.items;
+	    }
+
+	    /**
+	     * Get active items from store
+	     * @return {Array} Item objects
+	     */
+
+	  }, {
+	    key: 'getItemsFilteredByActive',
+	    value: function getItemsFilteredByActive() {
+	      var items = this.getItems();
+	      var values = items.filter(function (item) {
+	        return item.active === true;
+	      }, []);
+
+	      return values;
+	    }
+
+	    /**
+	     * Get items from store reduced to just their values
+	     * @return {Array} Item objects
+	     */
+
+	  }, {
+	    key: 'getItemsReducedToValues',
+	    value: function getItemsReducedToValues() {
+	      var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.getItems();
+
+	      var values = items.reduce(function (prev, current) {
+	        prev.push(current.value);
+	        return prev;
+	      }, []);
+
+	      return values;
+	    }
+
+	    /**
+	     * Get choices from store
+	     * @return {Array} Option objects
+	     */
+
+	  }, {
+	    key: 'getChoices',
+	    value: function getChoices() {
+	      var state = this.store.getState();
+	      return state.choices;
+	    }
+
+	    /**
+	     * Get active choices from store
+	     * @return {Array} Option objects
+	     */
+
+	  }, {
+	    key: 'getChoicesFilteredByActive',
+	    value: function getChoicesFilteredByActive() {
+	      var choices = this.getChoices();
+	      var values = choices.filter(function (choice) {
+	        return choice.active === true;
+	      }, []);
+
+	      return values;
+	    }
+
+	    /**
+	     * Get selectable choices from store
+	     * @return {Array} Option objects
+	     */
+
+	  }, {
+	    key: 'getChoicesFilteredBySelectable',
+	    value: function getChoicesFilteredBySelectable() {
+	      var choices = this.getChoices();
+	      var values = choices.filter(function (choice) {
+	        return choice.disabled !== true;
+	      }, []);
+
+	      return values;
+	    }
+
+	    /**
+	     * Get single choice by it's ID
+	     * @return {Object} Found choice
+	     */
+
+	  }, {
+	    key: 'getChoiceById',
+	    value: function getChoiceById(id) {
+	      if (id) {
+	        var choices = this.getChoicesFilteredByActive();
+	        var foundChoice = choices.find(function (choice) {
+	          return choice.id === parseInt(id, 10);
+	        });
+	        return foundChoice;
+	      }
+	      return false;
+	    }
+
+	    /**
+	     * Get groups from store
+	     * @return {Array} Group objects
+	     */
+
+	  }, {
+	    key: 'getGroups',
+	    value: function getGroups() {
+	      var state = this.store.getState();
+	      return state.groups;
+	    }
+
+	    /**
+	     * Get active groups from store
+	     * @return {Array} Group objects
+	     */
+
+	  }, {
+	    key: 'getGroupsFilteredByActive',
+	    value: function getGroupsFilteredByActive() {
+	      var groups = this.getGroups();
+	      var choices = this.getChoices();
+
+	      var values = groups.filter(function (group) {
+	        var isActive = group.active === true && group.disabled === false;
+	        var hasActiveOptions = choices.some(function (choice) {
+	          return choice.active === true && choice.disabled === false;
+	        });
+	        return isActive && hasActiveOptions;
+	      }, []);
+
+	      return values;
+	    }
+
+	    /**
+	     * Get group by group id
+	     * @param  {Number} id Group ID
+	     * @return {Object}    Group data
+	     */
+
+	  }, {
+	    key: 'getGroupById',
+	    value: function getGroupById(id) {
+	      var groups = this.getGroups();
+	      var foundGroup = groups.find(function (group) {
+	        return group.id === id;
+	      });
+
+	      return foundGroup;
+	    }
+	  }]);
+
+	  return Store;
+	}();
+
+	exports.default = Store;
+
+
+		module.exports = Store;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
+
+	var _createStore = __webpack_require__(11);
+
+	var _createStore2 = _interopRequireDefault(_createStore);
+
+	var _combineReducers = __webpack_require__(26);
+
+	var _combineReducers2 = _interopRequireDefault(_combineReducers);
+
+	var _bindActionCreators = __webpack_require__(28);
+
+	var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
+
+	var _applyMiddleware = __webpack_require__(29);
+
+	var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
+
+	var _compose = __webpack_require__(30);
+
+	var _compose2 = _interopRequireDefault(_compose);
+
+	var _warning = __webpack_require__(27);
+
+	var _warning2 = _interopRequireDefault(_warning);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	/*
+	* This is a dummy function to check if the function name has been altered by minification.
+	* If the function has been minified and NODE_ENV !== 'production', warn the user.
+	*/
+	function isCrushed() {}
+
+	if (false) {
+	  (0, _warning2['default'])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
+	}
+
+	exports.createStore = _createStore2['default'];
+	exports.combineReducers = _combineReducers2['default'];
+	exports.bindActionCreators = _bindActionCreators2['default'];
+	exports.applyMiddleware = _applyMiddleware2['default'];
+	exports.compose = _compose2['default'];
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	exports.ActionTypes = undefined;
+	exports['default'] = createStore;
+
+	var _isPlainObject = __webpack_require__(12);
+
+	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+
+	var _symbolObservable = __webpack_require__(22);
+
+	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	/**
+	 * These are private action types reserved by Redux.
+	 * For any unknown actions, you must return the current state.
+	 * If the current state is undefined, you must return the initial state.
+	 * Do not reference these action types directly in your code.
+	 */
+	var ActionTypes = exports.ActionTypes = {
+	  INIT: '@@redux/INIT'
+	};
+
+	/**
+	 * Creates a Redux store that holds the state tree.
+	 * The only way to change the data in the store is to call `dispatch()` on it.
+	 *
+	 * There should only be a single store in your app. To specify how different
+	 * parts of the state tree respond to actions, you may combine several reducers
+	 * into a single reducer function by using `combineReducers`.
+	 *
+	 * @param {Function} reducer A function that returns the next state tree, given
+	 * the current state tree and the action to handle.
+	 *
+	 * @param {any} [preloadedState] The initial state. You may optionally specify it
+	 * to hydrate the state from the server in universal apps, or to restore a
+	 * previously serialized user session.
+	 * If you use `combineReducers` to produce the root reducer function, this must be
+	 * an object with the same shape as `combineReducers` keys.
+	 *
+	 * @param {Function} enhancer The store enhancer. You may optionally specify it
+	 * to enhance the store with third-party capabilities such as middleware,
+	 * time travel, persistence, etc. The only store enhancer that ships with Redux
+	 * is `applyMiddleware()`.
+	 *
+	 * @returns {Store} A Redux store that lets you read the state, dispatch actions
+	 * and subscribe to changes.
+	 */
+	function createStore(reducer, preloadedState, enhancer) {
+	  var _ref2;
+
+	  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+	    enhancer = preloadedState;
+	    preloadedState = undefined;
+	  }
+
+	  if (typeof enhancer !== 'undefined') {
+	    if (typeof enhancer !== 'function') {
+	      throw new Error('Expected the enhancer to be a function.');
+	    }
+
+	    return enhancer(createStore)(reducer, preloadedState);
+	  }
+
+	  if (typeof reducer !== 'function') {
+	    throw new Error('Expected the reducer to be a function.');
+	  }
+
+	  var currentReducer = reducer;
+	  var currentState = preloadedState;
+	  var currentListeners = [];
+	  var nextListeners = currentListeners;
+	  var isDispatching = false;
+
+	  function ensureCanMutateNextListeners() {
+	    if (nextListeners === currentListeners) {
+	      nextListeners = currentListeners.slice();
+	    }
+	  }
+
+	  /**
+	   * Reads the state tree managed by the store.
+	   *
+	   * @returns {any} The current state tree of your application.
+	   */
+	  function getState() {
+	    return currentState;
+	  }
+
+	  /**
+	   * Adds a change listener. It will be called any time an action is dispatched,
+	   * and some part of the state tree may potentially have changed. You may then
+	   * call `getState()` to read the current state tree inside the callback.
+	   *
+	   * You may call `dispatch()` from a change listener, with the following
+	   * caveats:
+	   *
+	   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
+	   * If you subscribe or unsubscribe while the listeners are being invoked, this
+	   * will not have any effect on the `dispatch()` that is currently in progress.
+	   * However, the next `dispatch()` call, whether nested or not, will use a more
+	   * recent snapshot of the subscription list.
+	   *
+	   * 2. The listener should not expect to see all state changes, as the state
+	   * might have been updated multiple times during a nested `dispatch()` before
+	   * the listener is called. It is, however, guaranteed that all subscribers
+	   * registered before the `dispatch()` started will be called with the latest
+	   * state by the time it exits.
+	   *
+	   * @param {Function} listener A callback to be invoked on every dispatch.
+	   * @returns {Function} A function to remove this change listener.
+	   */
+	  function subscribe(listener) {
+	    if (typeof listener !== 'function') {
+	      throw new Error('Expected listener to be a function.');
+	    }
+
+	    var isSubscribed = true;
+
+	    ensureCanMutateNextListeners();
+	    nextListeners.push(listener);
+
+	    return function unsubscribe() {
+	      if (!isSubscribed) {
+	        return;
+	      }
+
+	      isSubscribed = false;
+
+	      ensureCanMutateNextListeners();
+	      var index = nextListeners.indexOf(listener);
+	      nextListeners.splice(index, 1);
+	    };
+	  }
+
+	  /**
+	   * Dispatches an action. It is the only way to trigger a state change.
+	   *
+	   * The `reducer` function, used to create the store, will be called with the
+	   * current state tree and the given `action`. Its return value will
+	   * be considered the **next** state of the tree, and the change listeners
+	   * will be notified.
+	   *
+	   * The base implementation only supports plain object actions. If you want to
+	   * dispatch a Promise, an Observable, a thunk, or something else, you need to
+	   * wrap your store creating function into the corresponding middleware. For
+	   * example, see the documentation for the `redux-thunk` package. Even the
+	   * middleware will eventually dispatch plain object actions using this method.
+	   *
+	   * @param {Object} action A plain object representing “what changed”. It is
+	   * a good idea to keep actions serializable so you can record and replay user
+	   * sessions, or use the time travelling `redux-devtools`. An action must have
+	   * a `type` property which may not be `undefined`. It is a good idea to use
+	   * string constants for action types.
+	   *
+	   * @returns {Object} For convenience, the same action object you dispatched.
+	   *
+	   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
+	   * return something else (for example, a Promise you can await).
+	   */
+	  function dispatch(action) {
+	    if (!(0, _isPlainObject2['default'])(action)) {
+	      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
+	    }
+
+	    if (typeof action.type === 'undefined') {
+	      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
+	    }
+
+	    if (isDispatching) {
+	      throw new Error('Reducers may not dispatch actions.');
+	    }
+
+	    try {
+	      isDispatching = true;
+	      currentState = currentReducer(currentState, action);
+	    } finally {
+	      isDispatching = false;
+	    }
+
+	    var listeners = currentListeners = nextListeners;
+	    for (var i = 0; i < listeners.length; i++) {
+	      listeners[i]();
+	    }
+
+	    return action;
+	  }
+
+	  /**
+	   * Replaces the reducer currently used by the store to calculate the state.
+	   *
+	   * You might need this if your app implements code splitting and you want to
+	   * load some of the reducers dynamically. You might also need this if you
+	   * implement a hot reloading mechanism for Redux.
+	   *
+	   * @param {Function} nextReducer The reducer for the store to use instead.
+	   * @returns {void}
+	   */
+	  function replaceReducer(nextReducer) {
+	    if (typeof nextReducer !== 'function') {
+	      throw new Error('Expected the nextReducer to be a function.');
+	    }
+
+	    currentReducer = nextReducer;
+	    dispatch({ type: ActionTypes.INIT });
+	  }
+
+	  /**
+	   * Interoperability point for observable/reactive libraries.
+	   * @returns {observable} A minimal observable of state changes.
+	   * For more information, see the observable proposal:
+	   * https://github.com/zenparsing/es-observable
+	   */
+	  function observable() {
+	    var _ref;
+
+	    var outerSubscribe = subscribe;
+	    return _ref = {
+	      /**
+	       * The minimal observable subscription method.
+	       * @param {Object} observer Any object that can be used as an observer.
+	       * The observer object should have a `next` method.
+	       * @returns {subscription} An object with an `unsubscribe` method that can
+	       * be used to unsubscribe the observable from the store, and prevent further
+	       * emission of values from the observable.
+	       */
+	      subscribe: function subscribe(observer) {
+	        if (typeof observer !== 'object') {
+	          throw new TypeError('Expected the observer to be an object.');
+	        }
+
+	        function observeState() {
+	          if (observer.next) {
+	            observer.next(getState());
+	          }
+	        }
+
+	        observeState();
+	        var unsubscribe = outerSubscribe(observeState);
+	        return { unsubscribe: unsubscribe };
+	      }
+	    }, _ref[_symbolObservable2['default']] = function () {
+	      return this;
+	    }, _ref;
+	  }
+
+	  // When a store is created, an "INIT" action is dispatched so that every
+	  // reducer returns their initial state. This effectively populates
+	  // the initial state tree.
+	  dispatch({ type: ActionTypes.INIT });
+
+	  return _ref2 = {
+	    dispatch: dispatch,
+	    subscribe: subscribe,
+	    getState: getState,
+	    replaceReducer: replaceReducer
+	  }, _ref2[_symbolObservable2['default']] = observable, _ref2;
+	}
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseGetTag = __webpack_require__(13),
+	    getPrototype = __webpack_require__(19),
+	    isObjectLike = __webpack_require__(21);
+
+	/** `Object#toString` result references. */
+	var objectTag = '[object Object]';
+
+	/** Used for built-in method references. */
+	var funcProto = Function.prototype,
+	    objectProto = Object.prototype;
+
+	/** Used to resolve the decompiled source of functions. */
+	var funcToString = funcProto.toString;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/** Used to infer the `Object` constructor. */
+	var objectCtorString = funcToString.call(Object);
+
+	/**
+	 * Checks if `value` is a plain object, that is, an object created by the
+	 * `Object` constructor or one with a `[[Prototype]]` of `null`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.8.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
+	 * @example
+	 *
+	 * function Foo() {
+	 *   this.a = 1;
+	 * }
+	 *
+	 * _.isPlainObject(new Foo);
+	 * // => false
+	 *
+	 * _.isPlainObject([1, 2, 3]);
+	 * // => false
+	 *
+	 * _.isPlainObject({ 'x': 0, 'y': 0 });
+	 * // => true
+	 *
+	 * _.isPlainObject(Object.create(null));
+	 * // => true
+	 */
+	function isPlainObject(value) {
+	  if (!isObjectLike(value) || baseGetTag(value) != objectTag) {
+	    return false;
+	  }
+	  var proto = getPrototype(value);
+	  if (proto === null) {
+	    return true;
+	  }
+	  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+	  return typeof Ctor == 'function' && Ctor instanceof Ctor &&
+	    funcToString.call(Ctor) == objectCtorString;
+	}
+
+	module.exports = isPlainObject;
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Symbol = __webpack_require__(14),
+	    getRawTag = __webpack_require__(17),
+	    objectToString = __webpack_require__(18);
+
+	/** `Object#toString` result references. */
+	var nullTag = '[object Null]',
+	    undefinedTag = '[object Undefined]';
+
+	/** Built-in value references. */
+	var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+	/**
+	 * The base implementation of `getTag` without fallbacks for buggy environments.
+	 *
+	 * @private
+	 * @param {*} value The value to query.
+	 * @returns {string} Returns the `toStringTag`.
+	 */
+	function baseGetTag(value) {
+	  if (value == null) {
+	    return value === undefined ? undefinedTag : nullTag;
+	  }
+	  return (symToStringTag && symToStringTag in Object(value))
+	    ? getRawTag(value)
+	    : objectToString(value);
+	}
+
+	module.exports = baseGetTag;
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var root = __webpack_require__(15);
+
+	/** Built-in value references. */
+	var Symbol = root.Symbol;
+
+	module.exports = Symbol;
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var freeGlobal = __webpack_require__(16);
+
+	/** Detect free variable `self`. */
+	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+	/** Used as a reference to the global object. */
+	var root = freeGlobal || freeSelf || Function('return this')();
+
+	module.exports = root;
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
+	var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+	module.exports = freeGlobal;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Symbol = __webpack_require__(14);
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var nativeObjectToString = objectProto.toString;
+
+	/** Built-in value references. */
+	var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+	/**
+	 * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+	 *
+	 * @private
+	 * @param {*} value The value to query.
+	 * @returns {string} Returns the raw `toStringTag`.
+	 */
+	function getRawTag(value) {
+	  var isOwn = hasOwnProperty.call(value, symToStringTag),
+	      tag = value[symToStringTag];
+
+	  try {
+	    value[symToStringTag] = undefined;
+	    var unmasked = true;
+	  } catch (e) {}
+
+	  var result = nativeObjectToString.call(value);
+	  if (unmasked) {
+	    if (isOwn) {
+	      value[symToStringTag] = tag;
+	    } else {
+	      delete value[symToStringTag];
+	    }
+	  }
+	  return result;
+	}
+
+	module.exports = getRawTag;
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var nativeObjectToString = objectProto.toString;
+
+	/**
+	 * Converts `value` to a string using `Object.prototype.toString`.
+	 *
+	 * @private
+	 * @param {*} value The value to convert.
+	 * @returns {string} Returns the converted string.
+	 */
+	function objectToString(value) {
+	  return nativeObjectToString.call(value);
+	}
+
+	module.exports = objectToString;
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var overArg = __webpack_require__(20);
+
+	/** Built-in value references. */
+	var getPrototype = overArg(Object.getPrototypeOf, Object);
+
+	module.exports = getPrototype;
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	/**
+	 * Creates a unary function that invokes `func` with its argument transformed.
+	 *
+	 * @private
+	 * @param {Function} func The function to wrap.
+	 * @param {Function} transform The argument transform.
+	 * @returns {Function} Returns the new function.
+	 */
+	function overArg(func, transform) {
+	  return function(arg) {
+	    return func(transform(arg));
+	  };
+	}
+
+	module.exports = overArg;
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return value != null && typeof value == 'object';
+	}
+
+	module.exports = isObjectLike;
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(23);
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _ponyfill = __webpack_require__(25);
+
+	var _ponyfill2 = _interopRequireDefault(_ponyfill);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var root; /* global window */
+
+
+	if (typeof self !== 'undefined') {
+	  root = self;
+	} else if (typeof window !== 'undefined') {
+	  root = window;
+	} else if (typeof global !== 'undefined') {
+	  root = global;
+	} else if (true) {
+	  root = module;
+	} else {
+	  root = Function('return this')();
+	}
+
+	var result = (0, _ponyfill2['default'])(root);
+	exports['default'] = result;
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(24)(module)))
+
+/***/ },
+/* 24 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports['default'] = symbolObservablePonyfill;
+	function symbolObservablePonyfill(root) {
+		var result;
+		var _Symbol = root.Symbol;
+
+		if (typeof _Symbol === 'function') {
+			if (_Symbol.observable) {
+				result = _Symbol.observable;
+			} else {
+				result = _Symbol('observable');
+				_Symbol.observable = result;
+			}
+		} else {
+			result = '@@observable';
+		}
+
+		return result;
+	};
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	exports['default'] = combineReducers;
+
+	var _createStore = __webpack_require__(11);
+
+	var _isPlainObject = __webpack_require__(12);
+
+	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+
+	var _warning = __webpack_require__(27);
+
+	var _warning2 = _interopRequireDefault(_warning);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function getUndefinedStateErrorMessage(key, action) {
+	  var actionType = action && action.type;
+	  var actionName = actionType && '"' + actionType.toString() + '"' || 'an action';
+
+	  return 'Given action ' + actionName + ', reducer "' + key + '" returned undefined. ' + 'To ignore an action, you must explicitly return the previous state.';
+	}
+
+	function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
+	  var reducerKeys = Object.keys(reducers);
+	  var argumentName = action && action.type === _createStore.ActionTypes.INIT ? 'preloadedState argument passed to createStore' : 'previous state received by the reducer';
+
+	  if (reducerKeys.length === 0) {
+	    return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
+	  }
+
+	  if (!(0, _isPlainObject2['default'])(inputState)) {
+	    return 'The ' + argumentName + ' has unexpected type of "' + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + '". Expected argument to be an object with the following ' + ('keys: "' + reducerKeys.join('", "') + '"');
+	  }
+
+	  var unexpectedKeys = Object.keys(inputState).filter(function (key) {
+	    return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
+	  });
+
+	  unexpectedKeys.forEach(function (key) {
+	    unexpectedKeyCache[key] = true;
+	  });
+
+	  if (unexpectedKeys.length > 0) {
+	    return 'Unexpected ' + (unexpectedKeys.length > 1 ? 'keys' : 'key') + ' ' + ('"' + unexpectedKeys.join('", "') + '" found in ' + argumentName + '. ') + 'Expected to find one of the known reducer keys instead: ' + ('"' + reducerKeys.join('", "') + '". Unexpected keys will be ignored.');
+	  }
+	}
+
+	function assertReducerSanity(reducers) {
+	  Object.keys(reducers).forEach(function (key) {
+	    var reducer = reducers[key];
+	    var initialState = reducer(undefined, { type: _createStore.ActionTypes.INIT });
+
+	    if (typeof initialState === 'undefined') {
+	      throw new Error('Reducer "' + key + '" returned undefined during initialization. ' + 'If the state passed to the reducer is undefined, you must ' + 'explicitly return the initial state. The initial state may ' + 'not be undefined.');
+	    }
+
+	    var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.');
+	    if (typeof reducer(undefined, { type: type }) === 'undefined') {
+	      throw new Error('Reducer "' + key + '" returned undefined when probed with a random type. ' + ('Don\'t try to handle ' + _createStore.ActionTypes.INIT + ' or other actions in "redux/*" ') + 'namespace. They are considered private. Instead, you must return the ' + 'current state for any unknown actions, unless it is undefined, ' + 'in which case you must return the initial state, regardless of the ' + 'action type. The initial state may not be undefined.');
+	    }
+	  });
+	}
+
+	/**
+	 * Turns an object whose values are different reducer functions, into a single
+	 * reducer function. It will call every child reducer, and gather their results
+	 * into a single state object, whose keys correspond to the keys of the passed
+	 * reducer functions.
+	 *
+	 * @param {Object} reducers An object whose values correspond to different
+	 * reducer functions that need to be combined into one. One handy way to obtain
+	 * it is to use ES6 `import * as reducers` syntax. The reducers may never return
+	 * undefined for any action. Instead, they should return their initial state
+	 * if the state passed to them was undefined, and the current state for any
+	 * unrecognized action.
+	 *
+	 * @returns {Function} A reducer function that invokes every reducer inside the
+	 * passed object, and builds a state object with the same shape.
+	 */
+	function combineReducers(reducers) {
+	  var reducerKeys = Object.keys(reducers);
+	  var finalReducers = {};
+	  for (var i = 0; i < reducerKeys.length; i++) {
+	    var key = reducerKeys[i];
+
+	    if (false) {
+	      if (typeof reducers[key] === 'undefined') {
+	        (0, _warning2['default'])('No reducer provided for key "' + key + '"');
+	      }
+	    }
+
+	    if (typeof reducers[key] === 'function') {
+	      finalReducers[key] = reducers[key];
+	    }
+	  }
+	  var finalReducerKeys = Object.keys(finalReducers);
+
+	  if (false) {
+	    var unexpectedKeyCache = {};
+	  }
+
+	  var sanityError;
+	  try {
+	    assertReducerSanity(finalReducers);
+	  } catch (e) {
+	    sanityError = e;
+	  }
+
+	  return function combination() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments[1];
+
+	    if (sanityError) {
+	      throw sanityError;
+	    }
+
+	    if (false) {
+	      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
+	      if (warningMessage) {
+	        (0, _warning2['default'])(warningMessage);
+	      }
+	    }
+
+	    var hasChanged = false;
+	    var nextState = {};
+	    for (var i = 0; i < finalReducerKeys.length; i++) {
+	      var key = finalReducerKeys[i];
+	      var reducer = finalReducers[key];
+	      var previousStateForKey = state[key];
+	      var nextStateForKey = reducer(previousStateForKey, action);
+	      if (typeof nextStateForKey === 'undefined') {
+	        var errorMessage = getUndefinedStateErrorMessage(key, action);
+	        throw new Error(errorMessage);
+	      }
+	      nextState[key] = nextStateForKey;
+	      hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+	    }
+	    return hasChanged ? nextState : state;
+	  };
+	}
+
+/***/ },
+/* 27 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	exports['default'] = warning;
+	/**
+	 * Prints a warning in the console if it exists.
+	 *
+	 * @param {String} message The warning message.
+	 * @returns {void}
+	 */
+	function warning(message) {
+	  /* eslint-disable no-console */
+	  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+	    console.error(message);
+	  }
+	  /* eslint-enable no-console */
+	  try {
+	    // This error was thrown as a convenience so that if you enable
+	    // "break on all exceptions" in your console,
+	    // it would pause the execution at this line.
+	    throw new Error(message);
+	    /* eslint-disable no-empty */
+	  } catch (e) {}
+	  /* eslint-enable no-empty */
+	}
+
+/***/ },
+/* 28 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	exports['default'] = bindActionCreators;
+	function bindActionCreator(actionCreator, dispatch) {
+	  return function () {
+	    return dispatch(actionCreator.apply(undefined, arguments));
+	  };
+	}
+
+	/**
+	 * Turns an object whose values are action creators, into an object with the
+	 * same keys, but with every function wrapped into a `dispatch` call so they
+	 * may be invoked directly. This is just a convenience method, as you can call
+	 * `store.dispatch(MyActionCreators.doSomething())` yourself just fine.
+	 *
+	 * For convenience, you can also pass a single function as the first argument,
+	 * and get a function in return.
+	 *
+	 * @param {Function|Object} actionCreators An object whose values are action
+	 * creator functions. One handy way to obtain it is to use ES6 `import * as`
+	 * syntax. You may also pass a single function.
+	 *
+	 * @param {Function} dispatch The `dispatch` function available on your Redux
+	 * store.
+	 *
+	 * @returns {Function|Object} The object mimicking the original object, but with
+	 * every action creator wrapped into the `dispatch` call. If you passed a
+	 * function as `actionCreators`, the return value will also be a single
+	 * function.
+	 */
+	function bindActionCreators(actionCreators, dispatch) {
+	  if (typeof actionCreators === 'function') {
+	    return bindActionCreator(actionCreators, dispatch);
+	  }
+
+	  if (typeof actionCreators !== 'object' || actionCreators === null) {
+	    throw new Error('bindActionCreators expected an object or a function, instead received ' + (actionCreators === null ? 'null' : typeof actionCreators) + '. ' + 'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?');
+	  }
+
+	  var keys = Object.keys(actionCreators);
+	  var boundActionCreators = {};
+	  for (var i = 0; i < keys.length; i++) {
+	    var key = keys[i];
+	    var actionCreator = actionCreators[key];
+	    if (typeof actionCreator === 'function') {
+	      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
+	    }
+	  }
+	  return boundActionCreators;
+	}
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports['default'] = applyMiddleware;
+
+	var _compose = __webpack_require__(30);
+
+	var _compose2 = _interopRequireDefault(_compose);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	/**
+	 * Creates a store enhancer that applies middleware to the dispatch method
+	 * of the Redux store. This is handy for a variety of tasks, such as expressing
+	 * asynchronous actions in a concise manner, or logging every action payload.
+	 *
+	 * See `redux-thunk` package as an example of the Redux middleware.
+	 *
+	 * Because middleware is potentially asynchronous, this should be the first
+	 * store enhancer in the composition chain.
+	 *
+	 * Note that each middleware will be given the `dispatch` and `getState` functions
+	 * as named arguments.
+	 *
+	 * @param {...Function} middlewares The middleware chain to be applied.
+	 * @returns {Function} A store enhancer applying the middleware.
+	 */
+	function applyMiddleware() {
+	  for (var _len = arguments.length, middlewares = Array(_len), _key = 0; _key < _len; _key++) {
+	    middlewares[_key] = arguments[_key];
+	  }
+
+	  return function (createStore) {
+	    return function (reducer, preloadedState, enhancer) {
+	      var store = createStore(reducer, preloadedState, enhancer);
+	      var _dispatch = store.dispatch;
+	      var chain = [];
+
+	      var middlewareAPI = {
+	        getState: store.getState,
+	        dispatch: function dispatch(action) {
+	          return _dispatch(action);
+	        }
+	      };
+	      chain = middlewares.map(function (middleware) {
+	        return middleware(middlewareAPI);
+	      });
+	      _dispatch = _compose2['default'].apply(undefined, chain)(store.dispatch);
+
+	      return _extends({}, store, {
+	        dispatch: _dispatch
+	      });
+	    };
+	  };
+	}
+
+/***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	exports.__esModule = true;
+	exports["default"] = compose;
+	/**
+	 * Composes single-argument functions from right to left. The rightmost
+	 * function can take multiple arguments as it provides the signature for
+	 * the resulting composite function.
+	 *
+	 * @param {...Function} funcs The functions to compose.
+	 * @returns {Function} A function obtained by composing the argument functions
+	 * from right to left. For example, compose(f, g, h) is identical to doing
+	 * (...args) => f(g(h(...args))).
+	 */
+
+	function compose() {
+	  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+	    funcs[_key] = arguments[_key];
+	  }
+
+	  if (funcs.length === 0) {
+	    return function (arg) {
+	      return arg;
+	    };
+	  }
+
+	  if (funcs.length === 1) {
+	    return funcs[0];
+	  }
+
+	  var last = funcs[funcs.length - 1];
+	  var rest = funcs.slice(0, -1);
+	  return function () {
+	    return rest.reduceRight(function (composed, f) {
+	      return f(composed);
+	    }, last.apply(undefined, arguments));
+	  };
+	}
+
+/***/ },
 /* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _redux = __webpack_require__(10);
+
+	var _items = __webpack_require__(32);
+
+	var _items2 = _interopRequireDefault(_items);
+
+	var _groups = __webpack_require__(33);
+
+	var _groups2 = _interopRequireDefault(_groups);
+
+	var _choices = __webpack_require__(34);
+
+	var _choices2 = _interopRequireDefault(_choices);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var appReducer = (0, _redux.combineReducers)({
+	  items: _items2.default,
+	  groups: _groups2.default,
+	  choices: _choices2.default
+	});
+
+	var rootReducer = function rootReducer(passedState, action) {
+	  var state = passedState;
+	  // If we are clearing all items, groups and options we reassign
+	  // state and then pass that state to our proper reducer. This isn't
+	  // mutating our actual state
+	  // See: http://stackoverflow.com/a/35641992
+	  if (action.type === 'CLEAR_ALL') {
+	    state = undefined;
+	  }
+
+	  return appReducer(state, action);
+	};
+
+	exports.default = rootReducer;
+
+/***/ },
+/* 32 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var items = function items() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case 'ADD_ITEM':
+	      {
+	        // Add object to items array
+	        var newState = [].concat(_toConsumableArray(state), [{
+	          id: action.id,
+	          choiceId: action.choiceId,
+	          groupId: action.groupId,
+	          value: action.value,
+	          label: action.label,
+	          active: true,
+	          highlighted: false
+	        }]);
+
+	        return newState.map(function (item) {
+	          if (item.highlighted) {
+	            item.highlighted = false;
+	          }
+	          return item;
+	        });
+	      }
+
+	    case 'REMOVE_ITEM':
+	      {
+	        // Set item to inactive
+	        return state.map(function (item) {
+	          if (item.id === action.id) {
+	            item.active = false;
+	          }
+	          return item;
+	        });
+	      }
+
+	    case 'HIGHLIGHT_ITEM':
+	      {
+	        return state.map(function (item) {
+	          if (item.id === action.id) {
+	            item.highlighted = action.highlighted;
+	          }
+	          return item;
+	        });
+	      }
+
+	    default:
+	      {
+	        return state;
+	      }
+	  }
+	};
+
+	exports.default = items;
+
+/***/ },
+/* 33 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var groups = function groups() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case 'ADD_GROUP':
+	      {
+	        return [].concat(_toConsumableArray(state), [{
+	          id: action.id,
+	          value: action.value,
+	          active: action.active,
+	          disabled: action.disabled
+	        }]);
+	      }
+
+	    case 'CLEAR_CHOICES':
+	      {
+	        return state.groups = [];
+	      }
+
+	    default:
+	      {
+	        return state;
+	      }
+	  }
+	};
+
+	exports.default = groups;
+
+/***/ },
+/* 34 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var choices = function choices() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case 'ADD_CHOICE':
+	      {
+	        /*
+	            A disabled choice appears in the choice dropdown but cannot be selected
+	            A selected choice has been added to the passed input's value (added as an item)
+	            An active choice appears within the choice dropdown
+	         */
+	        return [].concat(_toConsumableArray(state), [{
+	          id: action.id,
+	          groupId: action.groupId,
+	          value: action.value,
+	          label: action.label,
+	          disabled: action.disabled,
+	          selected: false,
+	          active: true,
+	          score: 9999
+	        }]);
+	      }
+
+	    case 'ADD_ITEM':
+	      {
+	        var newState = state;
+
+	        // If all choices need to be activated
+	        if (action.activateOptions) {
+	          newState = state.map(function (choice) {
+	            choice.active = action.active;
+	            return choice;
+	          });
+	        }
+	        // When an item is added and it has an associated choice,
+	        // we want to disable it so it can't be chosen again
+	        if (action.choiceId > -1) {
+	          newState = state.map(function (choice) {
+	            if (choice.id === parseInt(action.choiceId, 10)) {
+	              choice.selected = true;
+	            }
+	            return choice;
+	          });
+	        }
+
+	        return newState;
+	      }
+
+	    case 'REMOVE_ITEM':
+	      {
+	        // When an item is removed and it has an associated choice,
+	        // we want to re-enable it so it can be chosen again
+	        if (action.choiceId > -1) {
+	          return state.map(function (choice) {
+	            if (choice.id === parseInt(action.choiceId, 10)) {
+	              choice.selected = false;
+	            }
+	            return choice;
+	          });
+	        }
+
+	        return state;
+	      }
+
+	    case 'FILTER_CHOICES':
+	      {
+	        var filteredResults = action.results;
+	        var filteredState = state.map(function (choice) {
+	          // Set active state based on whether choice is
+	          // within filtered results
+
+	          choice.active = filteredResults.some(function (result) {
+	            if (result.item.id === choice.id) {
+	              choice.score = result.score;
+	              return true;
+	            }
+	            return false;
+	          });
+
+	          return choice;
+	        });
+
+	        return filteredState;
+	      }
+
+	    case 'ACTIVATE_CHOICES':
+	      {
+	        return state.map(function (choice) {
+	          choice.active = action.active;
+	          return choice;
+	        });
+	      }
+
+	    case 'CLEAR_CHOICES':
+	      {
+	        return state.choices = [];
+	      }
+
+	    default:
+	      {
+	        return state;
+	      }
+	  }
+	};
+
+	exports.default = choices;
+
+/***/ },
+/* 35 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var addItem = exports.addItem = function addItem(value, label, id, choiceId, groupId) {
+	  return {
+	    type: 'ADD_ITEM',
+	    value: value,
+	    label: label,
+	    id: id,
+	    choiceId: choiceId,
+	    groupId: groupId
+	  };
+	};
+
+	var removeItem = exports.removeItem = function removeItem(id, choiceId) {
+	  return {
+	    type: 'REMOVE_ITEM',
+	    id: id,
+	    choiceId: choiceId
+	  };
+	};
+
+	var highlightItem = exports.highlightItem = function highlightItem(id, highlighted) {
+	  return {
+	    type: 'HIGHLIGHT_ITEM',
+	    id: id,
+	    highlighted: highlighted
+	  };
+	};
+
+	var addChoice = exports.addChoice = function addChoice(value, label, id, groupId, disabled) {
+	  return {
+	    type: 'ADD_CHOICE',
+	    value: value,
+	    label: label,
+	    id: id,
+	    groupId: groupId,
+	    disabled: disabled
+	  };
+	};
+
+	var filterChoices = exports.filterChoices = function filterChoices(results) {
+	  return {
+	    type: 'FILTER_CHOICES',
+	    results: results
+	  };
+	};
+
+	var activateChoices = exports.activateChoices = function activateChoices() {
+	  var active = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+	  return {
+	    type: 'ACTIVATE_CHOICES',
+	    active: active
+	  };
+	};
+
+	var clearChoices = exports.clearChoices = function clearChoices() {
+	  return {
+	    type: 'CLEAR_CHOICES'
+	  };
+	};
+
+	var addGroup = exports.addGroup = function addGroup(value, id, active, disabled) {
+	  return {
+	    type: 'ADD_GROUP',
+	    value: value,
+	    id: id,
+	    active: active,
+	    disabled: disabled
+	  };
+	};
+
+	var clearAll = exports.clearAll = function clearAll() {
+	  return {
+	    type: 'CLEAR_ALL'
+	  };
+		};
+
+/***/ },
+/* 36 */
 /***/ function(module, exports) {
 
 	'use strict';
