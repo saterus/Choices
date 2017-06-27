@@ -65,6 +65,7 @@ class Choices {
       searchChoices: true,
       searchFloor: 1,
       searchFields: ['label', 'value'],
+      searchInputAutofocus: true,
       position: 'auto',
       resetScrollPosition: true,
       regexFilter: null,
@@ -742,7 +743,7 @@ class Choices {
     if (hasActiveDropdown) {
       this.hideDropdown();
     } else {
-      this.showDropdown(true);
+      this.showDropdown(this.config.searchInputAutofocus);
     }
 
     return this;
@@ -1418,7 +1419,7 @@ class Choices {
 
     // If a user is typing and the dropdown is not active
     if (passedElementType !== 'text' && /[a-zA-Z0-9-_ ]/.test(keyString) && !hasActiveDropdown) {
-      this.showDropdown(true);
+      this.showDropdown(this.config.searchInputAutofocus);
     }
 
     this.canSearch = this.config.searchEnabled;
@@ -1468,7 +1469,7 @@ class Choices {
       } else if (passedElementType === 'select-one') {
         // Open single select dropdown if it's not active
         if (!hasActiveDropdown) {
-          this.showDropdown(true);
+          this.showDropdown(this.config.searchInputAutofocus);
           e.preventDefault();
         }
       }
@@ -1486,7 +1487,7 @@ class Choices {
       if (hasActiveDropdown || passedElementType === 'select-one') {
         // Show dropdown if focus
         if (!hasActiveDropdown) {
-          this.showDropdown(true);
+          this.showDropdown(this.config.searchInputAutofocus);
         }
 
         this.canSearch = false;
@@ -1653,7 +1654,7 @@ class Choices {
         } else {
           if (!hasActiveDropdown) {
             // If a select box, we want to show the dropdown
-            this.showDropdown(true);
+            this.showDropdown(this.config.searchInputAutofocus);
           }
         }
       }
@@ -1715,7 +1716,7 @@ class Choices {
           }
         } else {
           if (this.canSearch) {
-            this.showDropdown(true);
+            this.showDropdown(this.config.searchInputAutofocus);
           } else {
             this.showDropdown();
             this.containerOuter.focus();
@@ -1801,7 +1802,7 @@ class Choices {
             this.containerOuter.classList.add(this.config.classNames.focusState);
 
             if (!hasActiveDropdown) {
-              this.showDropdown(true);
+              this.showDropdown(this.config.searchInputAutofocus);
             }
           }
         },
