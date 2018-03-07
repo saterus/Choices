@@ -2803,12 +2803,14 @@ class Choices {
 
         // Create array of options from option elements
         passedOptions.forEach((o) => {
+          console.log('Building choices from options:', o, o.dataset);
           allChoices.push({
             value: o.value,
             label: o.innerHTML,
             selected: o.selected,
             disabled: o.disabled || o.parentNode.disabled,
-            placeholder: o.hasAttribute('placeholder')
+            placeholder: o.hasAttribute('placeholder'),
+            customProperties: o.dataset,
           });
         });
 

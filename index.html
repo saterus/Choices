@@ -228,6 +228,14 @@
       <p><small>Try searching for 'fantastic'</small></p>
       <select class="form-control" name="choices-single-selected-option" id="choices-single-selected-option" placeholder="This is a placeholder"></select>
 
+      <label for="choices-custom-data-properties">Custom Properties via Data Attributes</label>
+      <p><small>Try searching for 'fantastic'</small></p>
+      <select class="form-control" name="choices-custom-data-properties" id="choices-custom-data-properties" placeholder="This is a placeholder">
+        <option value="Dropdown item 1" data-description="pretty bad">Dropdown item 1</option>
+        <option value="Dropdown item 2" data-description="just okay">Dropdown item 2</option>
+        <option value="Dropdown item 3" data-description="fantastic">Dropdown item 3</option>
+      </select>
+
       <label for="choices-single-no-sorting">Options without sorting</label>
       <select class="form-control" name="choices-single-no-sorting" id="choices-single-no-sorting" placeholder="This is a placeholder">
         <option value="Madrid">Madrid</option>
@@ -471,6 +479,31 @@
           },
         ],
       }).setValueByChoice('Two');
+
+      var customDataProperties = new Choices('#choices-custom-data-properties',{
+        searchFields: ['label', 'value', 'customProperties.description'],
+        callbackOnCreateTemplates: function(strToEl) {
+          var classNames = this.config.classNames;
+          var itemSelectText = this.config.itemSelectText;
+          return {
+            choice: function(data) {
+              return strToEl('\
+                <div\
+                  class="'+ String(classNames.item) + ' ' + String(classNames.itemChoice) + ' ' + String(data.disabled ? classNames.itemDisabled : classNames.itemSelectable) + '"\
+                  data-select-text="'+ String(itemSelectText) + '"\
+                  data-choice \
+                  '+ String(data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable') + '\
+                  data-id="'+ String(data.id) + '"\
+                  data-value="'+ String(data.value) + '"\
+                  '+ String(data.groupId > 0 ? 'role="treeitem"' : 'role="option"') + '\
+                  >\
+                  <span style="float: right;color:grey;">' + String(data.customProperties.description) + '</span> ' + String(data.label) + '\
+                </div>\
+              ');
+            },
+          };
+        },
+      });
 
       var singleNoSorting = new Choices('#choices-single-no-sorting', {
         shouldSort: false,
